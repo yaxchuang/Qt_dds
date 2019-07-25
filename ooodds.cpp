@@ -64,7 +64,7 @@ void oooDDS::dds_write()
             this->dds_metersample->frequency(this->Data->frequency);
             this->dds_metersample->pf(this->Data->pf);
             this->dds_meterwriter->write(*this->dds_metersample);
-            emit response_pub_sub(tr("Meter is Publishing"));
+            emit response_pub_sub(tr("Meter No.1 is Publishing"));
             std::cout << "meter_pub~~~~"<<std::endl;
             std::cout << "ID is "<< this->Data->id<<std::endl;
             std::cout << "Voltage is " << this->Data->voltage<< " V" << std::endl;

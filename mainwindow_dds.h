@@ -53,8 +53,10 @@ private:
     DeviceData Data_sub;
     DeviceData *Data_local;
     DeviceData *Data_remote;
+    DeviceData *Data_remote2;
     oooDDS *DDS_pub;
     oooDDS *DDS_sub;
+    oooDDS *DDS_sub2;
     MyData *data;
     QLCDNumber *lcdNumber_vol;
     QLCDNumber *lcdNumber_cur;

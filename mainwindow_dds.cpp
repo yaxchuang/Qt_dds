@@ -29,8 +29,10 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     timer(new QTimer),
     Data_local(new DeviceData),
     Data_remote(new DeviceData),
+    Data_remote2(new DeviceData),
     DDS_pub(new oooDDS(0, Data_local, DDS_PUB, 0)), //0->pub_meter
     DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 1)), //1->dds_read_relay
+    DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 0)), //1->dds_read_meter
     data(new MyData)
 {
     ui->setupUi(this);
@@ -47,17 +49,23 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     connect(this->DDS_sub, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
     DDS_pub->set_always(true);
     DDS_sub->set_always(true);
+    DDS_sub2->set_always(true);
     DDS_pub->set_count(2);
     DDS_sub->set_count(2);
+    DDS_sub2->set_count(2);
     DDS_pub->start();
     DDS_sub->start();
-
+    DDS_sub2->start();
     ui->lcdNumber_vol->display(0);
     ui->lcdNumber_cur->display(0);
     ui->lcdNumber_p->display(0);
     ui->lcdNumber_freq->display(0);
     ui->lcdNumber_pf->display(0);
-
+    ui->lcdNumber_vol_2->display(0);
+    ui->lcdNumber_cur_2->display(0);
+    ui->lcdNumber_p_2->display(0);
+    ui->lcdNumber_freq_2->display(0);
+    ui->lcdNumber_pf_2->display(0);
     QDomDocument doc;
     QFile file("/home/iclab/rti_workspace/5.3.1/examples/connext_dds/qos/reliable.xml");
     if (!file.open(QIODevice::ReadOnly))
@@ -99,6 +107,11 @@ void MainWindow_dds::lcdshow()
     ui->lcdNumber_p->display(Data_local->power);
     ui->lcdNumber_freq->display(Data_local->frequency);
     ui->lcdNumber_pf->display(Data_local->pf);
+    ui->lcdNumber_vol_2->display(Data_remote2->voltage);
+    ui->lcdNumber_cur_2->display(Data_remote2->current);
+    ui->lcdNumber_p_2->display(Data_remote2->power);
+    ui->lcdNumber_freq_2->display(Data_remote2->frequency);
+    ui->lcdNumber_pf_2->display(Data_remote2->pf);
 }
 
 void MainWindow_dds::onTimeDisplay()

@@ -10,8 +10,8 @@ Get_modbus::Get_modbus(QObject *parent, DeviceData *data):
     QThread (parent),
     Data_local(data)
 {
-    this->deviceid=1;
-    this->portname="/dev/ttyUSB0";
+    this->deviceid=0;
+    this->portname="/dev/ttyUSB1";
     this->baudrate=QSerialPort::Baud19200;
     this->parity=QSerialPort::NoParity;
     this->databit=QSerialPort::Data8;
