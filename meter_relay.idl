@@ -1,0 +1,15 @@
+module two{
+    struct Meter {
+        long id;
+        float voltage;
+        float current;
+        float power;
+        float frequency;
+        float pf;
+        string<255> status;
+    };
+    struct Relay {
+        long id;
+        string<255> status;
+    };
+};
