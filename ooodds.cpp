@@ -44,10 +44,10 @@ void oooDDS::dds_write()
 //    };
     // Set the second bit to 1
     this->running |= 0x10;
-    this->Data->id = 0;
+    this->Data->id = 1;
 
     while(this->count){
-        if (Data->id == 1){
+        if (Data->id == 2){
             this->dds_relaysample->id(this->Data->id);
             this->dds_relaysample->status(this->Data->status);
             this->dds_relaywriter->write(*this->dds_relaysample);
@@ -162,14 +162,16 @@ void oooDDS::dds_read_meter()
         // Take all samples
         dds::sub::LoanedSamples<two::Meter> samples = reader_1.take();
         for (auto sample : samples){
-            if (sample.info().valid()){
-                count1 += !always_1;
-                data_1.id = sample.data().id();
-                data_1.voltage = sample.data().voltage();
-                data_1.current = sample.data().current();
-                data_1.power = sample.data().power();
-                data_1.frequency = sample.data().frequency();
-                data_1.pf = sample.data().pf();
+            if (sample.data().id() == 3 ){
+                if (sample.info().valid()){
+                    count1 += !always_1;
+                    data_1.id = sample.data().id();
+                    data_1.voltage = sample.data().voltage();
+                    data_1.current = sample.data().current();
+                    data_1.power = sample.data().power();
+                    data_1.frequency = sample.data().frequency();
+                    data_1.pf = sample.data().pf();
+                }
             }
         }
     } // The LoanedSamples destructor returns the loan
@@ -194,7 +196,7 @@ void oooDDS::dds_read_meter()
 
     waitset.detach_condition(read_condition);
     read_condition.close();
-    std::cout << "send meter response" << std::endl;
+    std::cout << "send meter No.1 response" << std::endl;
 
     //emit response_pub_sub("NO METER SUB");
     // Set the first bit to 0

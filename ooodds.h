@@ -45,7 +45,7 @@ public:
     void dds_read_relay();
     void dds_read_meter();
     void dds_destroy();
-    void Domainparticipant();  //
+//    void Domainparticipant();  //
     void run () {
         if(pub_sub){
 
@@ -67,8 +67,8 @@ private:
     bool relay_meter;
     unsigned long delaytime;
     DeviceData *Data;
-    dds::domain::qos::DomainParticipantFactoryQos *dds_qos; //myself
-    dds::domain::DomainParticipantListener *participant_listener; //myself
+    dds::domain::qos::DomainParticipantFactoryQos *dds_qos; //
+    dds::domain::DomainParticipantListener *participant_listener; //
     dds::domain::DomainParticipant *dds_participant;
     dds::topic::Topic<two::Relay> *dds_relaytopic;
     dds::topic::Topic<two::Meter> *dds_metertopic;

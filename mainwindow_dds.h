@@ -13,15 +13,15 @@
 #include <QtWidgets>
 #include "meter_relay.hpp"
 
-struct MyData{
-    std::string status;
-    long id;
-    float voltage;
-    float current;
-    float power;
-    float frequency;
-    float pf;
-};
+//struct MyData{
+//    std::string status;
+//    long id;
+//    float voltage;
+//    float current;
+//    float power;
+//    float frequency;
+//    float pf;
+//};
 
 namespace Ui {
 class MainWindow_dds;
@@ -51,18 +51,25 @@ private:
     QPushButton *button;
     DeviceData Data_pub;
     DeviceData Data_sub;
+//    DeviceData Data_sub2;
     DeviceData *Data_local;
     DeviceData *Data_remote;
     DeviceData *Data_remote2;
     oooDDS *DDS_pub;
     oooDDS *DDS_sub;
     oooDDS *DDS_sub2;
-    MyData *data;
+//    MyData *data;
+//    MyData *data2;
     QLCDNumber *lcdNumber_vol;
     QLCDNumber *lcdNumber_cur;
     QLCDNumber *lcdNumber_p;
     QLCDNumber *lcdNumber_freq;
     QLCDNumber *lcdNumber_pf;
+    QLCDNumber *lcdNumber_vol_2;
+    QLCDNumber *lcdNumber_cur_2;
+    QLCDNumber *lcdNumber_p_2;
+    QLCDNumber *lcdNumber_freq_2;
+    QLCDNumber *lcdNumber_pf_2;
 
 signals:
     void valueChanged(float value);

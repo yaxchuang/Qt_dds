@@ -10,7 +10,7 @@ Get_modbus::Get_modbus(QObject *parent, DeviceData *data):
     QThread (parent),
     Data_local(data)
 {
-    this->deviceid=0;
+    this->deviceid=1;
     this->portname="/dev/ttyUSB1";
     this->baudrate=QSerialPort::Baud19200;
     this->parity=QSerialPort::NoParity;
@@ -73,7 +73,7 @@ void Get_modbus::PrepareReadRequest(DeviceData *data)
         if (reply->error() == QModbusDevice::NoError)
         {
             const QModbusDataUnit unit = reply->result();
-            data->id = (0);
+            data->id = (1);
             data->current = (unit.value(6)*0.1f*4/100);
             data->voltage = (unit.value(0)*0.1f);
             data->power = (unit.value(10)*0.1f*4);

@@ -31,13 +31,14 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     Data_remote(new DeviceData),
     Data_remote2(new DeviceData),
     DDS_pub(new oooDDS(0, Data_local, DDS_PUB, 0)), //0->pub_meter
-    DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 1)), //1->dds_read_relay
-    DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 0)), //1->dds_read_meter
-    data(new MyData)
+    DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 0)), //0->dds_read_meter
+    DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 1)) //1->dds_read_relay
+//    data(new MyData)
+//    data2(new MyData)
 {
     ui->setupUi(this);
     UISetup();
-    //this->Data_pub.id = 0;
+    this->Data_pub.id = 1;
     //this->Data_pub.status = "on";
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeDisplay()));
     timer->start(10);
@@ -46,7 +47,7 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     get_modbus->start();
 
     connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));
-    connect(this->DDS_sub, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
+    connect(this->DDS_sub2, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
     DDS_pub->set_always(true);
     DDS_sub->set_always(true);
     DDS_sub2->set_always(true);
@@ -102,16 +103,27 @@ void MainWindow_dds::lcdshow()
     ui->lcdNumber_p->setDigitCount(5);
     ui->lcdNumber_freq->setDigitCount(5);
     ui->lcdNumber_pf->setDigitCount(5);
+    ui->lcdNumber_vol_2->setDigitCount(5);
+    ui->lcdNumber_cur_2->setDigitCount(5);
+    ui->lcdNumber_p_2->setDigitCount(5);
+    ui->lcdNumber_freq_2->setDigitCount(5);
+    ui->lcdNumber_pf_2->setDigitCount(5);
     ui->lcdNumber_vol->display(Data_local->voltage);
     ui->lcdNumber_cur->display(Data_local->current);
     ui->lcdNumber_p->display(Data_local->power);
     ui->lcdNumber_freq->display(Data_local->frequency);
     ui->lcdNumber_pf->display(Data_local->pf);
-    ui->lcdNumber_vol_2->display(Data_remote2->voltage);
-    ui->lcdNumber_cur_2->display(Data_remote2->current);
-    ui->lcdNumber_p_2->display(Data_remote2->power);
-    ui->lcdNumber_freq_2->display(Data_remote2->frequency);
-    ui->lcdNumber_pf_2->display(Data_remote2->pf);
+    sleep(1);
+    ui->lcdNumber_vol_2->display(Data_remote->voltage);
+    ui->lcdNumber_cur_2->display(Data_remote->current);
+    ui->lcdNumber_p_2->display(Data_remote->power);
+    ui->lcdNumber_freq_2->display(Data_remote->frequency);
+    ui->lcdNumber_pf_2->display(Data_remote->pf);
+//    ui->lcdNumber_vol_2->display(110);
+//    ui->lcdNumber_cur_2->display(0.45);
+//    ui->lcdNumber_p_2->display(10);
+//    ui->lcdNumber_freq_2->display(60);
+//    ui->lcdNumber_pf_2->display(0.6);
 }
 
 void MainWindow_dds::onTimeDisplay()

@@ -39,7 +39,7 @@ public:
     QString portname;
     int deviceid;
     DeviceData *Data_local;
-    MyData *data;
+//    MyData *data;
     void SetCommPara( QString, int, int, int, int);
 
 private:
