@@ -227,24 +227,23 @@ void oooDDS::dds_read_meter()
         // Take all samples
         dds::sub::LoanedSamples<two::Meter> samples = reader_1.take();
         for (auto sample : samples){
-            if (sample.data().id() == 1 ){
-                if (sample.info().valid()){
-                    count1 += !always_1;
-                    key_dec.henon_float = sample.data().init_value();
-                    data.id = sample.data().id();
-                    data.voltage = sample.data().voltage();
-                    data.current = sample.data().current();
-                    data.power = sample.data().power();
-                    data.frequency = sample.data().frequency();
-                    data.pf = sample.data().pf();
-                    data.status = sample.data().status();
-                    data.padding1 = sample.data().padding();
-                    // 1. decode key using RSA
-                    key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
+            if (sample.info().valid()){
+                count1 += !always_1;
+                key_dec.henon_float = sample.data().init_value();
+                data.id = sample.data().id();
+                data.voltage = sample.data().voltage();
+                data.current = sample.data().current();
+                data.power = sample.data().power();
+                data.frequency = sample.data().frequency();
+                data.pf = sample.data().pf();
+                data.status = sample.data().status();
+                data.padding1 = sample.data().padding();
+                // 1. decode key using RSA
+                key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
 
-                    // 2. decrypt function
-                    Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
-
+                // 2. decrypt function
+                Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
+                if (data.id== 1 ){
                     data_1.id = data.id;
                     data_1.voltage = data.voltage;
                     data_1.current = data.current;
@@ -253,6 +252,7 @@ void oooDDS::dds_read_meter()
                     data_1.pf = data.pf;
                 }
             }
+
         }
     } // The LoanedSamples destructor returns the loan
     );

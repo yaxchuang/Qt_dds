@@ -103,7 +103,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Power Meter 2</string>
+      <string>Power Meter 2 (Publisher)</string>
      </property>
     </widget>
     <widget class="QLabel" name="Power_meter">
@@ -133,7 +133,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Power Meter 1 (Publisher)</string>
+      <string>Power Meter 1 </string>
      </property>
     </widget>
     <widget class="QLabel" name="Relay">
