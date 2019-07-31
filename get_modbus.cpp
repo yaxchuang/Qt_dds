@@ -1,109 +1,70 @@
 #include "get_modbus.h"
+
+#include <algorithm>
 #include <iostream>
-#include <QtWidgets>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
-#include <rti/util/util.hpp>
+
+#include <QString>
 #include "ooodds.h"
+#include <errno.h>
+#include <src/include/modbus/modbus.h>
+#include <src/include/modbus/modbus-rtu.h>
+#include <src/include/modbus/modbus-tcp.h>
+#include "qmodbus.h"
+#include "meter_relay.hpp"
+#include <dds/pub/ddspub.hpp>
+#include <rti/util/util.hpp> // for sleep()
+#include <unistd.h
+
+#define On 1
+#define G_MSEC_PER_SEC 1000
+#define MODBUS_WRITE_REGISTER_CH1 0x01
 
 Get_modbus::Get_modbus(QObject *parent, DeviceData *data):
-    QThread (parent),
+    Data_remote(data),
     Data_local(data)
 {
-    this->deviceid=3;
-    this->portname="/dev/ttyUSB0";
-    this->baudrate=QSerialPort::Baud19200;
-    this->parity=QSerialPort::NoParity;
-    this->databit=QSerialPort::Data8;
-    this->stopbit=QSerialPort::OneStop;
+    onModbus(Data_local);
 }
 
-void Get_modbus::run()
+void Get_modbus::onModbus(DeviceData *data)
 {
-    modbusDevice = new QModbusRtuSerialMaster();
-    SetCommPara(portname,baudrate,parity,databit,stopbit);
-    OpenSerialPort(Data_local);
-    while(1)
-    {
-        sleep(1);
-        PrepareReadRequest(Data_local);
+    modbus_t *ctx;
+    int nb_addr;
+    int flag = 0;
+
+    nb_addr = MODBUS_WRITE_REGISTER_CH1;
+
+//    std::cout << "Writing Relay" <<std::endl;
+    ctx = modbus_new_rtu("/dev/ttyUSB1", 9600, 'N', 8, 1);
+
+    modbus_set_slave(ctx, 2);
+    modbus_set_debug(ctx, ON);
+    sleep(1);
+    if (modbus_connect(ctx) == -1) {
+        flag = 1;
+        modbus_close(ctx);
+        modbus_free(ctx);
     }
-}
-
-void Get_modbus::SetCommPara( QString portName, int baudrate, int parity, int databit, int stopbit)
-{
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialPortNameParameter, portName);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialParityParameter, parity);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, baudrate);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, databit);
-    modbusDevice->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, stopbit);
-
-}
-
-void Get_modbus::OpenSerialPort(DeviceData *data)
-{
-    modbusDevice->connectDevice();
-    modbusDevice->disconnectDevice();
-    if (modbusDevice->connectDevice())
-    {
-        if(modbusDevice->state()== QModbusDevice::ConnectedState)
-        {}
-    }
-    else
-    {
-        data->voltage = (-1.0);
-        data->current = (-1.0);
-        data->power = (-1.0);
-        data->frequency = (-1.0);
-        data->pf = (-1.0);
+    std::cout << std::endl;
+    std::cout << "NOW current= " << Data_remote->current<<std::endl;
+    if(Data_remote->current >=0.45){
+        modbus_write_register(ctx, nb_addr, 513);
+//        Data_local->status = "Off";
         data->status = "Off";
-        modbusDevice->disconnectDevice();
+//        std::cout << "data->status = "<< data->status<<std::endl;
     }
+    else{
+        modbus_write_register(ctx, nb_addr, 257);
+//        Data_local->status = "On";
+        data->status = "On";
+//        std::cout << "data->status = "<< data->status<<std::endl;
+    }
+    std::cout<< "Relay of status is " << data->status <<std::endl;
+
+    if(!flag){
+        modbus_close(ctx);
+        modbus_free(ctx);
+    }
+    sleep(1);
 }
 
-void Get_modbus::PrepareReadRequest(DeviceData *data)
-{
-    mutex=false;
-    if (!modbusDevice)
-        return;
-    if(auto *reply = modbusDevice->sendReadRequest(readRequest(QModbusDataUnit::HoldingRegisters, 20, 27), deviceid))
-    {
-        while(!reply->isFinished())
-            QEventLoop().processEvents(QEventLoop::ExcludeUserInputEvents, modbusDevice->timeout());
-        if (reply->error() == QModbusDevice::NoError)
-        {
-            const QModbusDataUnit unit = reply->result();
-            data->id = (1);
-            data->current = (unit.value(6)*0.1f*4/100);
-            data->voltage = (unit.value(0)*0.1f);
-            data->power = (unit.value(10)*0.1f*4);
-            data->frequency = (unit.value(26)*0.1f/10);
-            data->pf = (unit.value(22)*0.1f/100);
-            data->status = "On";
-            std::cout << "modbusread~~~~"<<std::endl;
-            std::cout << "Voltage is "<< data->voltage <<std::endl;
-            std::cout << "Current is "<< data->current <<std::endl;
-            std::cout << "Power is "<< data->power <<std::endl;
-            std::cout << "Frequency is "<< data->frequency <<std::endl;
-            std::cout << "PF is "<< data->pf <<std::endl;
-            std::cout << std::endl;
-        }
-    }
-}
-
-QModbusDataUnit Get_modbus::readRequest(int funcCode, int startAddress, int numberOfEntries) const
-{
-    const auto table = static_cast<QModbusDataUnit::RegisterType> (funcCode);
-    return QModbusDataUnit(table, startAddress, static_cast<quint16>(numberOfEntries));
-}
-
-Get_modbus::~Get_modbus()
-{
-    if (modbusDevice->state()== QModbusDevice::ConnectedState) {
-        while  (!mutex)
-//           sleep(1500)
-                   ;
-        modbusDevice->disconnectDevice();
-    }
-    modbusDevice->deleteLater();
-}

@@ -31,14 +31,14 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     Data_remote(new DeviceData),
     Data_remote2(new DeviceData),
     DDS_pub(new oooDDS(0, Data_local, DDS_PUB, 0)), //0->pub_meter
-    DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 0)), //0->dds_read_meter
-    DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 1)) //1->dds_read_relay
+    DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 1)), //0->dds_read_meter1
+    DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 0)) //1->dds_read_meter2
 //    data(new MyData)
 //    data2(new MyData)
 {
     ui->setupUi(this);
     UISetup();
-    this->Data_pub.id = 3;
+    this->Data_pub.id = 2;
     //this->Data_pub.status = "on";
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeDisplay()));
     timer->start(10);
@@ -90,7 +90,7 @@ MainWindow_dds::~MainWindow_dds()
 void MainWindow_dds::UISetup()
 {
     this->setStyleSheet("background-color:#bdd7ee");
-    QPixmap pix("/home/iclab/Qtdds_0624M2/logo.png");
+    QPixmap pix("/home/iclab/Qtdds_0624R/logo.png");
     ui->image->setPixmap(pix);
     ui->image->setScaledContents(true);
     ui->image->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -108,17 +108,17 @@ void MainWindow_dds::lcdshow()
     ui->lcdNumber_p_2->setDigitCount(5);
     ui->lcdNumber_freq_2->setDigitCount(5);
     ui->lcdNumber_pf_2->setDigitCount(5);
-    ui->lcdNumber_vol->display(Data_local->voltage);
-    ui->lcdNumber_cur->display(Data_local->current);
-    ui->lcdNumber_p->display(Data_local->power);
-    ui->lcdNumber_freq->display(Data_local->frequency);
-    ui->lcdNumber_pf->display(Data_local->pf);
+    ui->lcdNumber_vol->display(Data_remote->voltage);
+    ui->lcdNumber_cur->display(Data_remote->current);
+    ui->lcdNumber_p->display(Data_remote->power);
+    ui->lcdNumber_freq->display(Data_remote->frequency);
+    ui->lcdNumber_pf->display(Data_remote->pf);
+    ui->lcdNumber_vol_2->display(Data_remote2->voltage);
+    ui->lcdNumber_cur_2->display(Data_remote2->current);
+    ui->lcdNumber_p_2->display(Data_remote2->power);
+    ui->lcdNumber_freq_2->display(Data_remote2->frequency);
+    ui->lcdNumber_pf_2->display(Data_remote2->pf);
     sleep(1);
-    ui->lcdNumber_vol_2->display(Data_remote->voltage);
-    ui->lcdNumber_cur_2->display(Data_remote->current);
-    ui->lcdNumber_p_2->display(Data_remote->power);
-    ui->lcdNumber_freq_2->display(Data_remote->frequency);
-    ui->lcdNumber_pf_2->display(Data_remote->pf);
 //    ui->lcdNumber_vol_2->display(110);
 //    ui->lcdNumber_cur_2->display(0.45);
 //    ui->lcdNumber_p_2->display(10);

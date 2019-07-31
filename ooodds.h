@@ -64,9 +64,9 @@ public:
         }
         else{
             if(relay_meter)
-                this->dds_read_relay();
+                this->dds_read_meter1();
             else
-                this->dds_read_meter();
+                this->dds_read_meter2();
         }
     }
 

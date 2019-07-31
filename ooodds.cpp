@@ -46,7 +46,7 @@ void oooDDS::dds_write()
 //    };
     // Set the second bit to 1
     this->running |= 0x10;
-    this->Data->id = 3;
+    this->Data->id = 2;
 
     /* For Encryption */
     KEYS key_enc; // key(seed) for encrypt data
@@ -124,9 +124,9 @@ void oooDDS::dds_write()
     this->running &= (this->running ^ 0x10);
 }
 
-void oooDDS::dds_read_relay()
+void oooDDS::dds_read_meter1()
 {
-    emit response_pub_sub("SUBSCRIBE RELAY");
+    emit response_pub_sub("Subscribe meter No.1\n");
     // Set the first bit to 1
     this->running |= 0x01;
 
@@ -153,18 +153,24 @@ void oooDDS::dds_read_relay()
                 count1 += !always_1;
                 key_dec.henon_float = sample.data().init_value();
                 data.id = sample.data().id();
-                data.status = sample.data().status();
-                data.padding1 = sample.data().padding1();
-                data.padding2 = sample.data().padding2();
+                data.voltage = sample.data().voltage();
+                data.current = sample.data().current();
+                data.power = sample.data().power();
+                data.frequency = sample.data().frequency();
+                data.pf = sample.data().pf();
 
                 // 1. decode key using RSA
                 key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
 
                 // 2. decrypt function
-                Decryption_CBC((BYTE*)&data.id, 16, key_dec.henon_float);
+                Decryption_CBC((BYTE*)&data.id, 32, key_dec.henon_float);
 
                 data_1.id = data.id;
-                data_1.status = data.status;
+                data_1.voltage = data.voltage;
+                data_1.current = data.current;
+                data_1.power = data.power;
+                data_1.frequency = data.frequency;
+                data_1.pf = data.pf;
 
                 std::cout << "sub_relay "<<std::endl;
                 std::cout << "ID is "<< data_1.id <<std::endl;
@@ -200,9 +206,9 @@ void oooDDS::dds_read_relay()
     this->running &= (this->running ^ 0x01);
 }
 
-void oooDDS::dds_read_meter()
+void oooDDS::dds_read_meter2()
 {
-    emit response_pub_sub("SUBSCRIBE METER");
+    emit response_pub_sub("Subscribe meter No.2\n");
     // Set the first bit to 1
     this->running |= 0x01;
 
