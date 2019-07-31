@@ -97,12 +97,14 @@ void oooDDS::dds_write()
             key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
 
             this->dds_relaysample->init_value(key_send);
-            this->dds_metersample->id(this->Data->id);
-            this->dds_metersample->voltage(this->Data->voltage);
-            this->dds_metersample->current(this->Data->current);
-            this->dds_metersample->power(this->Data->power);
-            this->dds_metersample->frequency(this->Data->frequency);
-            this->dds_metersample->pf(this->Data->pf);
+            this->dds_metersample->id(temp.id);
+            this->dds_metersample->voltage(temp.voltage);
+            this->dds_metersample->current(temp.current);
+            this->dds_metersample->power(temp.power);
+            this->dds_metersample->frequency(temp.frequency);
+            this->dds_metersample->pf(temp.pf);
+            this->dds_metersample->status(temp.status);
+            this->dds_metersample->padding(temp.padding1);
             this->dds_meterwriter->write(*this->dds_metersample);
             emit response_pub_sub(tr("Meter No.2 is Publishing"));
             std::cout << "meter_pub~~~~"<<std::endl;
@@ -235,12 +237,13 @@ void oooDDS::dds_read_meter()
                     data.power = sample.data().power();
                     data.frequency = sample.data().frequency();
                     data.pf = sample.data().pf();
-
+                    data.status = sample.data().status();
+                    data.padding1 = sample.data().padding();
                     // 1. decode key using RSA
                     key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
 
                     // 2. decrypt function
-                    Decryption_CBC((BYTE*)&data.id, 32, key_dec.henon_float);
+                    Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
 
                     data_1.id = data.id;
                     data_1.voltage = data.voltage;

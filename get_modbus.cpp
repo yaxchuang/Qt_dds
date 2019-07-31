@@ -10,7 +10,11 @@ Get_modbus::Get_modbus(QObject *parent, DeviceData *data):
     QThread (parent),
     Data_local(data)
 {
+<<<<<<< HEAD
     this->deviceid=3;
+=======
+    this->deviceid=1;
+>>>>>>> 7c03a24... Fix encryption problems
     this->portname="/dev/ttyUSB0";
     this->baudrate=QSerialPort::Baud19200;
     this->parity=QSerialPort::NoParity;
