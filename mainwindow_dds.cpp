@@ -46,8 +46,8 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     Get_modbus *get_modbus = new Get_modbus(Data_remote, Data_local);
     get_modbus->start();
 
-    connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));
-    connect(this->DDS_sub2, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
+    connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
+    connect(this->DDS_sub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));
     DDS_pub->set_always(true);
     DDS_sub->set_always(true);
     DDS_sub2->set_always(true);
