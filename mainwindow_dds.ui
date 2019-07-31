@@ -133,7 +133,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Power Meter 1 (Publisher)</string>
+      <string>Power Meter 1 </string>
      </property>
     </widget>
     <widget class="QLabel" name="Relay">
@@ -141,7 +141,7 @@
       <rect>
        <x>260</x>
        <y>100</y>
-       <width>51</width>
+       <width>130</width>
        <height>17</height>
       </rect>
      </property>
@@ -163,7 +163,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Relay 1</string>
+      <string>Relay 1 (Publisher)</string>
      </property>
     </widget>
     <widget class="QWidget" name="layoutWidget">

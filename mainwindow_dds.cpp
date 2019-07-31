@@ -43,7 +43,7 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeDisplay()));
     timer->start(10);
 
-    Get_modbus *get_modbus = new Get_modbus(this, Data_local);
+    Get_modbus *get_modbus = new Get_modbus(Data_remote, Data_local);
     get_modbus->start();
 
     connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));

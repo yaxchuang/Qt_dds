@@ -19,9 +19,9 @@
 #define G_MSEC_PER_SEC 1000
 #define MODBUS_WRITE_REGISTER_CH1 0x01
 
-Get_modbus::Get_modbus(QObject *parent, DeviceData *data):
+Get_modbus::Get_modbus(DeviceData *data, DeviceData *Data):
     Data_remote(data),
-    Data_local(data)
+    Data_local(Data)
 {
     onModbus(Data_local);
 }
@@ -35,7 +35,7 @@ void Get_modbus::onModbus(DeviceData *data)
     nb_addr = MODBUS_WRITE_REGISTER_CH1;
 
 //    std::cout << "Writing Relay" <<std::endl;
-    ctx = modbus_new_rtu("/dev/ttyUSB1", 9600, 'N', 8, 1);
+    ctx = modbus_new_rtu("/dev/ttyUSB0", 9600, 'N', 8, 1);
 
     modbus_set_slave(ctx, 2);
     modbus_set_debug(ctx, ON);

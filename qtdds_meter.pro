@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += ./encrypt/include/
 
 CONFIG += c++11
-#CONFIG += libmodbus
+CONFIG += libmodbus
 SOURCES += \
         main.cpp \
         mainwindow_dds.cpp \
@@ -33,6 +33,11 @@ SOURCES += \
         ooodds.cpp \
         meter_relayImpl.cxx \
         get_modbus.cpp \
+        3rdparty/libmodbus/src/modbus.c \
+        3rdparty/libmodbus/src/modbus-ascii.c \
+        3rdparty/libmodbus/src/modbus-data.c \
+        3rdparty/libmodbus/src/modbus-rtu.c \
+        3rdparty/libmodbus/src/modbus-tcp.c \
         encrypt/aes_tools.cpp \
         encrypt/rsa_tools.cpp \
         encrypt/hybrid_tools.cpp
@@ -46,6 +51,12 @@ HEADERS += \
         src/include/asyncdeltask.h \
         src/include/qexecthread.h \
         get_modbus.h  \
+        src/include/modbus/modbus.h \
+        src/include/modbus/modbus-rtu.h \
+        src/include/modbus/modbus-tcp.h \
+        src/include/modbus/modbus-version.h \
+        src/include/asyncdeltask.h \
+        src/include/qexecthread.h \
         encrypt/include/aes_tools.h \
         encrypt/include/rsa_tools.h \
         encrypt/include/hybrid_tools.h \
@@ -79,13 +90,13 @@ INCLUDEPATH += \
     $$NDDSHOME/include/ndds \
     $$NDDSHOME/include/ndds/hpp
 
-#INCLUDEPATH += 3rdparty/libmodbus \
-#               3rdparty/libmodbus/src \
-#               3rdparty/qextserialport \
-#               src/include/modbus \
-#               src/include
+INCLUDEPATH += 3rdparty/libmodbus \
+               3rdparty/libmodbus/src \
+               3rdparty/qextserialport \
+               src/include/modbus \
+               src/include
 
-#MODBUS = `pkg-config --libs --cflags libmodbus`
+MODBUS = `pkg-config --libs --cflags libmodbus`
 #CONFIG += PKGCONFIG
 #PKGCONFIG += libmodbus
 

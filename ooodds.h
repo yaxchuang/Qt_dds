@@ -53,8 +53,8 @@ public:
     void set_delay(int t){ this->delaytime = std::abs(t);}
     void set_always(bool n){ this->always = n;}
     void dds_write();
-    void dds_read_relay();
-    void dds_read_meter();
+    void dds_read_meter1();
+    void dds_read_meter2();
     void dds_destroy();
 //    void Domainparticipant();  //
     void run () {

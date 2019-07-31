@@ -132,7 +132,7 @@ void oooDDS::dds_read_meter1()
     // Set the first bit to 1
     this->running |= 0x01;
 
-    dds::sub::DataReader<two::Relay> &reader_1 = *this->dds_relayreader;
+    dds::sub::DataReader<two::Meter> &reader_1 = *this->dds_meterreader;
     DeviceData &data_1 = *this->Data;
     bool &always_1 = this->always;
 
@@ -143,14 +143,14 @@ void oooDDS::dds_read_meter1()
         dds::sub::status::DataState::any(),
         [&reader_1, &count1, &data_1, &always_1]()
     {
-        // Take all samples
-        dds::sub::LoanedSamples<two::Relay> samples = reader_1.take();
-        for (auto sample : samples){
-            /* For Decryption */
-            TempData1 data;
-            KEYS key_dec;
-            smallnum d = 1388241145, n = 2147615971; // RSA keys to encrypt key
+        /* For Decryption */
+        TempData1 data;
+        KEYS key_dec;
+        smallnum d = 1388241145, n = 2147615971; // RSA keys to encrypt key
 
+        // Take all samples
+        dds::sub::LoanedSamples<two::Meter> samples = reader_1.take();
+        for (auto sample : samples){
             if (sample.info().valid()){
                 count1 += !always_1;
                 key_dec.henon_float = sample.data().init_value();
