@@ -73,10 +73,10 @@ void oooDDS::dds_write()
         
         if (Data->id == 2){
             // 2. encrypt data
-            next_key[Data->id] = Encryption_CBC((BYTE*)&temp.id, 16, key_enc.henon_float);
+            next_key[Data->id-1] = Encryption_CBC((BYTE*)&temp.id, 16, key_enc.henon_float);
             
             // 3. encrypt key using RSA
-            key_send = Encrypt_key(key_enc.henon_int, e[Data->id], n[Data->id]);
+            key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
 
             this->dds_relaysample->init_value(key_send);
             this->dds_relaysample->id(temp.id);
@@ -91,10 +91,10 @@ void oooDDS::dds_write()
         }
         else{
             // 2. encrypt data
-            next_key[Data->id] = Encryption_CBC((BYTE*)&temp, 32, key_enc.henon_float);
+            next_key[Data->id-1] = Encryption_CBC((BYTE*)&temp, 32, key_enc.henon_float);
             
             // 3. encrypt key using RSA
-            key_send = Encrypt_key(key_enc.henon_int, e[Data->id], n[Data->id]);
+            key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
 
             this->dds_relaysample->init_value(key_send);
             this->dds_metersample->id(temp.id);
@@ -227,24 +227,25 @@ void oooDDS::dds_read_meter()
         // Take all samples
         dds::sub::LoanedSamples<two::Meter> samples = reader_1.take();
         for (auto sample : samples){
-            if (sample.data().id() == 3 ){
-                if (sample.info().valid()){
-                    count1 += !always_1;
-                    key_dec.henon_float = sample.data().init_value();
-                    data.id = sample.data().id();
-                    data.voltage = sample.data().voltage();
-                    data.current = sample.data().current();
-                    data.power = sample.data().power();
-                    data.frequency = sample.data().frequency();
-                    data.pf = sample.data().pf();
-                    data.status = sample.data().status();
-                    data.padding1 = sample.data().padding();
-                    // 1. decode key using RSA
-                    key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
+            if (sample.info().valid()){
+                count1 += !always_1;
+                key_dec.henon_float = sample.data().init_value();
+                data.id = sample.data().id();
+                data.voltage = sample.data().voltage();
+                data.current = sample.data().current();
+                data.power = sample.data().power();
+                data.frequency = sample.data().frequency();
+                data.pf = sample.data().pf();
+                data.status = sample.data().status();
+                data.padding1 = sample.data().padding();
 
-                    // 2. decrypt function
-                    Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
+                // 1. decode key using RSA
+                key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
 
+                // 2. decrypt function
+                Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
+
+                if (data.id == 3 ){
                     data_1.id = data.id;
                     data_1.voltage = data.voltage;
                     data_1.current = data.current;
