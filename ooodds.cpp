@@ -58,7 +58,7 @@ void oooDDS::dds_write()
     while(this->count){
         TempData1 temp;
         // 1. prepare key for encryption and update key for the next round
-        key_enc.henon_float = next_key[Data->id];
+        key_enc.henon_float = next_key[Data->id-1];
 
         // copy Data to temp
         temp.id = Data->id;
@@ -73,10 +73,10 @@ void oooDDS::dds_write()
         
         if (Data->id == 2){
             // 2. encrypt data
-            next_key[Data->id] = Encryption_CBC((BYTE*)&temp.id, 16, key_enc.henon_float);
+            next_key[Data->id-1] = Encryption_CBC((BYTE*)&temp.id, 16, key_enc.henon_float);
             
             // 3. encrypt key using RSA
-            key_send = Encrypt_key(key_enc.henon_int, e[Data->id], n[Data->id]);
+            key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
 
             this->dds_relaysample->init_value(key_send);
             this->dds_relaysample->id(temp.id);
@@ -91,10 +91,10 @@ void oooDDS::dds_write()
         }
         else{
             // 2. encrypt data
-            next_key[Data->id] = Encryption_CBC((BYTE*)&temp, 32, key_enc.henon_float);
+            next_key[Data->id-1] = Encryption_CBC((BYTE*)&temp, 32, key_enc.henon_float);
             
             // 3. encrypt key using RSA
-            key_send = Encrypt_key(key_enc.henon_int, e[Data->id], n[Data->id]);
+            key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
 
             this->dds_relaysample->init_value(key_send);
             this->dds_metersample->id(this->Data->id);
