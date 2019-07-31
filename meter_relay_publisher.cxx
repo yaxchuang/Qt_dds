@@ -49,51 +49,8 @@ objs\<arch>\meter_relay_subscriber <domain_id>
 
 #include "meter_relay.hpp"
 
-// include libmodbus
-/*#include <modbus-rtu.h>
-#include <modbus-tcp.h>
-#include <modbus.h>
-
-#define G_MSEC_PER_SEC 1000
-#define MODBUS_READ_REGISTERS_VOLTAGE 20
-#define MODBUS_READ_REGISTERS_CURRENT 26
-#define MODBUS_READ_REGISTERS_POWER 30
-#define MODBUS_READ_REGISTERS_FREQUENCY 46
-#define MODBUS_READ_REGISTERS_PF 42*/
-
 void publisher_main(int domain_id, int sample_count)
 {
-    /* For Modbus */
-    /*uint16_t *tab_reg;
-    uint16_t *tab_reg1;
-    uint16_t *tab_reg2;
-    uint16_t *tab_reg3;
-    uint16_t *tab_reg4;
-    modbus_t *ctx = nullptr;
-    int nb_points;
-    int nb_addr, nb_addr1, nb_addr2, nb_addr3, nb_addr4;
-    int rc;
-    int flag = 0;
-*/
-    std::cout << "Use RTU" << std::endl;
-    /*tab_reg = (uint16_t *) malloc(MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    memset(tab_reg, 0, MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    tab_reg1 = (uint16_t *) malloc(MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    memset(tab_reg1, 0, MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    tab_reg2 = (uint16_t *) malloc(MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    memset(tab_reg2, 0, MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    tab_reg3 = (uint16_t *) malloc(MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t)); 
-    memset(tab_reg3, 0, MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-    tab_reg4 = (uint16_t *) malloc(MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t)); 
-    memset(tab_reg4, 0, MODBUS_MAX_READ_REGISTERS * sizeof(uint16_t));
-
-    nb_points = 1;
-    nb_addr = MODBUS_READ_REGISTERS_CURRENT;
-    nb_addr1 = MODBUS_READ_REGISTERS_VOLTAGE;
-    nb_addr2 = MODBUS_READ_REGISTERS_POWER;
-    nb_addr3 = MODBUS_READ_REGISTERS_FREQUENCY;
-    nb_addr4 = MODBUS_READ_REGISTERS_PF;
-*/
     // Create a DomainParticipant with default Qos
     dds::domain::DomainParticipant participant (domain_id);
 
@@ -103,97 +60,17 @@ void publisher_main(int domain_id, int sample_count)
     // Create a DataWriter with default Qos (Publisher created in-line)
     dds::pub::DataWriter<two::Relay> writer(dds::pub::Publisher(participant), topic);
 
-    two::Meter instance;
+    two::Relay sample;
     for (int count = 0; count < sample_count || sample_count == 0; count++) {
         // Modify the data to be written here
 
-        //std::cout << "Writing two::Relay, count " << count << std::endl;
-        //writer.write(sample);
-        std::cout << "Writing Meter, count " << count<<std::endl;
-        //ctx = modbus_new_rtu("/dev/ttyUSB0", 19200, 'N', 8, 1);
-        //modbus_set_slave(ctx, 1);
-
-        std::cout << "READ REGISTERS\n\n" << std::endl;
-        /*flag = 0;
-        if (modbus_connect(ctx) == -1) {
-            flag = 1;
-            modbus_close(ctx);
-            modbus_free(ctx);
-        }
-
-        rc = 0;*/
-        /* Modify the data to be written here */
-        /*rc = modbus_read_registers(ctx, nb_addr, nb_points, tab_reg);
-        rc = modbus_read_registers(ctx, nb_addr1, nb_points, tab_reg1);
-        rc = modbus_read_registers(ctx, nb_addr2, nb_points, tab_reg2);
-        rc = modbus_read_registers(ctx, nb_addr3, nb_points, tab_reg3); 
-        rc = modbus_read_registers(ctx, nb_addr4, nb_points, tab_reg4); 
-*/
-        //if (rc == -1) {
-            //fprintf(stderr, "%s\n", modbus_strerror(errno));
-            /*std::cout << "Current is "<< -1.0f <<std::endl;
-            std::cout << "Voltage is "<< -1.0f <<std::endl;
-            std::cout << "Power is "<< -1.0f <<std::endl;
-            std::cout << "Frequency is "<< -1.0f <<std::endl;
-            std::cout << "PF is "<< -1.0f <<std::endl;
-
-            instance.id(41208);
-            instance.current(-1.0f);
-            instance.voltage(-1.0f);
-            instance.power(-1.0f);
-            instance.frequency(-1.0f);
-            instance.pf(-1.0f);
-
-        } else{
-            std::cout << "Current is "<< (double)*tab_reg*4*0.3f/1000 <<std::endl;
-            std::cout << "Voltage is "<< (double)*tab_reg1*0.1f/10 <<std::endl;
-            std::cout << "Voltage is "<< (double)*tab_reg2*0.4*0.1f <<std::endl;
-            std::cout << "Voltage is "<< (double)*tab_reg3*0.2f/100 <<std::endl;
-            std::cout << "Voltage is "<< (double)*tab_reg4*0.3f/1000 <<std::endl;
-            printf("Current is %.3lf\n", (double)*tab_reg*4/1000);
-            printf("Voltage is %.1lf\n", (double)*tab_reg1/10);
-            printf("Power is %.1lf\n", (double)*tab_reg2*0.4);
-            printf("Frequency is %.2lf\n", (double)*tab_reg3/100);  
-            printf("PF is %.3lf\n", (double)*tab_reg4/1000);
-
-            instance.id(41208);
-            instance.current((double)*tab_reg*4/1000);
-            instance.voltage((double)*tab_reg1/10);
-            instance.power((double)*tab_reg2*0.4);
-            instance.frequency((double)*tab_reg3/100);
-            instance.pf((double)*tab_reg4/1000);
-
-        }*/
-/*
-        if(instance->power == -1){
-            sprintf(instance->status, "Off");
-        } else {
-            sprintf(instance->status, "On");
-        }
-        printf("status is %s\n", instance->status);
-*/
-        /*if(!flag){
-            modbus_close(ctx);
-            modbus_free(ctx);
-        }*/
+        std::cout << "Writing two::Relay, count " << count << std::endl;
+        writer.write(sample);
 
         rti::util::sleep(dds::core::Duration(4));
     }
-    /* Free the memory */
-/*
-    modbus_free(tab_reg);
-    free(tab_reg1);
-    free(tab_reg2);
-    free(tab_reg3); 
-    free(tab_reg4);
-*/
-    /* Close the connection */
-
-    /*modbus_close(ctx);
-    modbus_free(ctx);
-*/
 }
-/*
+
 int main(int argc, char *argv[])
 {
 
@@ -207,6 +84,10 @@ int main(int argc, char *argv[])
         sample_count = atoi(argv[2]);
     }
 
+    // To turn on additional logging, include <rti/config/Logger.hpp> and
+    // uncomment the following line:
+    // rti::config::Logger::instance().verbosity(rti::config::Verbosity::STATUS_ALL);
+
     try {
         publisher_main(domain_id, sample_count);
     } catch (const std::exception& ex) {
@@ -215,6 +96,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    // RTI Connext provides a finalize_participant_factory() method
+    // if you want to release memory used by the participant factory singleton.
+    // Uncomment the following line to release the singleton:
+    //
+    // dds::domain::DomainParticipant::finalize_participant_factory();
+
     return 0;
 }
-*/
+

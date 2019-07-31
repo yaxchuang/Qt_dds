@@ -161,6 +161,9 @@ two_Meter_cPluginSupport_print_data(
         return;
     }
 
+    RTICdrType_printFloat(
+        &sample->init_value, "init_value", indent_level + 1);    
+
     RTICdrType_printLong(
         &sample->id, "id", indent_level + 1);    
 
@@ -179,13 +182,11 @@ two_Meter_cPluginSupport_print_data(
     RTICdrType_printFloat(
         &sample->pf, "pf", indent_level + 1);    
 
-    if (sample->status==NULL) {
-        RTICdrType_printString(
-            NULL,"status", indent_level + 1);
-    } else {
-        RTICdrType_printString(
-            sample->status,"status", indent_level + 1);    
-    }
+    RTICdrType_printLong(
+        &sample->status, "status", indent_level + 1);    
+
+    RTICdrType_printLong(
+        &sample->padding, "padding", indent_level + 1);    
 
 }
 
@@ -335,6 +336,11 @@ two_Meter_cPlugin_serialize(
 
     if(serialize_sample) {
 
+        if (!RTICdrStream_serializeFloat(
+            stream, &sample->init_value)) {
+            return RTI_FALSE;
+        }
+
         if (!RTICdrStream_serializeLong(
             stream, &sample->id)) {
             return RTI_FALSE;
@@ -365,8 +371,13 @@ two_Meter_cPlugin_serialize(
             return RTI_FALSE;
         }
 
-        if (!RTICdrStream_serializeString(
-            stream, sample->status, (255) + 1)) {
+        if (!RTICdrStream_serializeLong(
+            stream, &sample->status)) {
+            return RTI_FALSE;
+        }
+
+        if (!RTICdrStream_serializeLong(
+            stream, &sample->padding)) {
             return RTI_FALSE;
         }
 
@@ -407,6 +418,10 @@ two_Meter_cPlugin_deserialize_sample(
 
         two_Meter_c_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
 
+        if (!RTICdrStream_deserializeFloat(
+            stream, &sample->init_value)) {
+            goto fin; 
+        }
         if (!RTICdrStream_deserializeLong(
             stream, &sample->id)) {
             goto fin; 
@@ -431,8 +446,12 @@ two_Meter_cPlugin_deserialize_sample(
             stream, &sample->pf)) {
             goto fin; 
         }
-        if (!RTICdrStream_deserializeStringEx(
-            stream,&sample->status, (255) + 1,RTI_TRUE)) {
+        if (!RTICdrStream_deserializeLong(
+            stream, &sample->status)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_deserializeLong(
+            stream, &sample->padding)) {
             goto fin; 
         }
     }
@@ -663,6 +682,9 @@ RTIBool two_Meter_cPlugin_skip(
 
     if (skip_sample) {
 
+        if (!RTICdrStream_skipFloat (stream)) {
+            goto fin; 
+        }
         if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
@@ -681,7 +703,10 @@ RTIBool two_Meter_cPlugin_skip(
         if (!RTICdrStream_skipFloat (stream)) {
             goto fin; 
         }
-        if (!RTICdrStream_skipString (stream, (255)+1)) {
+        if (!RTICdrStream_skipLong (stream)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
     }
@@ -727,6 +752,9 @@ two_Meter_cPlugin_get_serialized_sample_max_size_ex(
         initial_alignment = 0;
     }
 
+    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+        current_alignment);
+
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
 
@@ -745,8 +773,11 @@ two_Meter_cPlugin_get_serialized_sample_max_size_ex(
     current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
         current_alignment);
 
-    current_alignment +=RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (255)+1);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;
@@ -799,6 +830,8 @@ two_Meter_cPlugin_get_serialized_sample_min_size(
         initial_alignment = 0;
     }
 
+    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+        current_alignment);
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
     current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
@@ -811,8 +844,10 @@ two_Meter_cPlugin_get_serialized_sample_min_size(
         current_alignment);
     current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
         current_alignment);
-    current_alignment +=RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, 1);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;
@@ -864,6 +899,10 @@ two_Meter_cPlugin_get_serialized_sample_size(
             current_alignment);
     }
 
+    current_alignment += RTICdrType_getFloatMaxSizeSerialized(
+        PRESTypePluginDefaultEndpointData_getAlignment(
+            endpoint_data, current_alignment));
+
     current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
             endpoint_data, current_alignment));
@@ -888,9 +927,13 @@ two_Meter_cPlugin_get_serialized_sample_size(
         PRESTypePluginDefaultEndpointData_getAlignment(
             endpoint_data, current_alignment));
 
-    current_alignment += RTICdrType_getStringSerializedSize(
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
-            endpoint_data, current_alignment), sample->status);
+            endpoint_data, current_alignment));
+
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
+        PRESTypePluginDefaultEndpointData_getAlignment(
+            endpoint_data, current_alignment));
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;
@@ -1340,16 +1383,20 @@ two_Relay_cPluginSupport_print_data(
         return;
     }
 
+    RTICdrType_printFloat(
+        &sample->init_value, "init_value", indent_level + 1);    
+
     RTICdrType_printLong(
         &sample->id, "id", indent_level + 1);    
 
-    if (sample->status==NULL) {
-        RTICdrType_printString(
-            NULL,"status", indent_level + 1);
-    } else {
-        RTICdrType_printString(
-            sample->status,"status", indent_level + 1);    
-    }
+    RTICdrType_printLong(
+        &sample->status, "status", indent_level + 1);    
+
+    RTICdrType_printLong(
+        &sample->padding1, "padding1", indent_level + 1);    
+
+    RTICdrType_printLong(
+        &sample->padding2, "padding2", indent_level + 1);    
 
 }
 
@@ -1499,13 +1546,28 @@ two_Relay_cPlugin_serialize(
 
     if(serialize_sample) {
 
+        if (!RTICdrStream_serializeFloat(
+            stream, &sample->init_value)) {
+            return RTI_FALSE;
+        }
+
         if (!RTICdrStream_serializeLong(
             stream, &sample->id)) {
             return RTI_FALSE;
         }
 
-        if (!RTICdrStream_serializeString(
-            stream, sample->status, (255) + 1)) {
+        if (!RTICdrStream_serializeLong(
+            stream, &sample->status)) {
+            return RTI_FALSE;
+        }
+
+        if (!RTICdrStream_serializeLong(
+            stream, &sample->padding1)) {
+            return RTI_FALSE;
+        }
+
+        if (!RTICdrStream_serializeLong(
+            stream, &sample->padding2)) {
             return RTI_FALSE;
         }
 
@@ -1546,12 +1608,24 @@ two_Relay_cPlugin_deserialize_sample(
 
         two_Relay_c_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
 
+        if (!RTICdrStream_deserializeFloat(
+            stream, &sample->init_value)) {
+            goto fin; 
+        }
         if (!RTICdrStream_deserializeLong(
             stream, &sample->id)) {
             goto fin; 
         }
-        if (!RTICdrStream_deserializeStringEx(
-            stream,&sample->status, (255) + 1,RTI_TRUE)) {
+        if (!RTICdrStream_deserializeLong(
+            stream, &sample->status)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_deserializeLong(
+            stream, &sample->padding1)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_deserializeLong(
+            stream, &sample->padding2)) {
             goto fin; 
         }
     }
@@ -1782,10 +1856,19 @@ RTIBool two_Relay_cPlugin_skip(
 
     if (skip_sample) {
 
+        if (!RTICdrStream_skipFloat (stream)) {
+            goto fin; 
+        }
         if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
-        if (!RTICdrStream_skipString (stream, (255)+1)) {
+        if (!RTICdrStream_skipLong (stream)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_skipLong (stream)) {
+            goto fin; 
+        }
+        if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
     }
@@ -1831,11 +1914,20 @@ two_Relay_cPlugin_get_serialized_sample_max_size_ex(
         initial_alignment = 0;
     }
 
+    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+        current_alignment);
+
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
 
-    current_alignment +=RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (255)+1);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;
@@ -1888,10 +1980,16 @@ two_Relay_cPlugin_get_serialized_sample_min_size(
         initial_alignment = 0;
     }
 
+    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+        current_alignment);
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
-    current_alignment +=RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, 1);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
+        current_alignment);
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;
@@ -1943,13 +2041,25 @@ two_Relay_cPlugin_get_serialized_sample_size(
             current_alignment);
     }
 
+    current_alignment += RTICdrType_getFloatMaxSizeSerialized(
+        PRESTypePluginDefaultEndpointData_getAlignment(
+            endpoint_data, current_alignment));
+
     current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
             endpoint_data, current_alignment));
 
-    current_alignment += RTICdrType_getStringSerializedSize(
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
-            endpoint_data, current_alignment), sample->status);
+            endpoint_data, current_alignment));
+
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
+        PRESTypePluginDefaultEndpointData_getAlignment(
+            endpoint_data, current_alignment));
+
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
+        PRESTypePluginDefaultEndpointData_getAlignment(
+            endpoint_data, current_alignment));
 
     if (include_encapsulation) {
         current_alignment += encapsulation_size;

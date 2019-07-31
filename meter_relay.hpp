@@ -9,8 +9,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the RTI Connext manual.
 */
 
-#ifndef meter_relay_1882284457_hpp
-#define meter_relay_1882284457_hpp
+#ifndef meter_relay_1882284563_hpp
+#define meter_relay_1882284563_hpp
 
 #include <iosfwd>
 #include "meter_relayImpl.h"
@@ -62,13 +62,15 @@ namespace two {
         Meter();
 
         Meter(
+            float init_value_param,
             int32_t id_param,
             float voltage_param,
             float current_param,
             float power_param,
             float frequency_param,
             float pf_param,
-            const dds::core::string& status_param);
+            int32_t status_param,
+            int32_t padding_param);
 
         #ifdef RTI_CXX11_RVALUE_REFERENCES
         #ifndef RTI_CXX11_NO_IMPLICIT_MOVE_OPERATIONS
@@ -81,6 +83,9 @@ namespace two {
         Meter& operator=(Meter&&  other_) OMG_NOEXCEPT;
         #endif
         #endif 
+
+        float init_value() const OMG_NOEXCEPT;
+        void init_value(float value);
 
         int32_t id() const OMG_NOEXCEPT;
         void id(int32_t value);
@@ -100,9 +105,11 @@ namespace two {
         float pf() const OMG_NOEXCEPT;
         void pf(float value);
 
-        dds::core::string& status() OMG_NOEXCEPT; 
-        const dds::core::string& status() const OMG_NOEXCEPT;
-        void status(const dds::core::string& value);
+        int32_t status() const OMG_NOEXCEPT;
+        void status(int32_t value);
+
+        int32_t padding() const OMG_NOEXCEPT;
+        void padding(int32_t value);
 
         bool operator == (const Meter& other_) const;
         bool operator != (const Meter& other_) const;
@@ -111,13 +118,15 @@ namespace two {
 
       private:
 
+        float m_init_value_;
         int32_t m_id_;
         float m_voltage_;
         float m_current_;
         float m_power_;
         float m_frequency_;
         float m_pf_;
-        dds::core::string m_status_;
+        int32_t m_status_;
+        int32_t m_padding_;
 
     };
 
@@ -134,8 +143,11 @@ namespace two {
         Relay();
 
         Relay(
+            float init_value_param,
             int32_t id_param,
-            const dds::core::string& status_param);
+            int32_t status_param,
+            int32_t padding1_param,
+            int32_t padding2_param);
 
         #ifdef RTI_CXX11_RVALUE_REFERENCES
         #ifndef RTI_CXX11_NO_IMPLICIT_MOVE_OPERATIONS
@@ -149,12 +161,20 @@ namespace two {
         #endif
         #endif 
 
+        float init_value() const OMG_NOEXCEPT;
+        void init_value(float value);
+
         int32_t id() const OMG_NOEXCEPT;
         void id(int32_t value);
 
-        dds::core::string& status() OMG_NOEXCEPT; 
-        const dds::core::string& status() const OMG_NOEXCEPT;
-        void status(const dds::core::string& value);
+        int32_t status() const OMG_NOEXCEPT;
+        void status(int32_t value);
+
+        int32_t padding1() const OMG_NOEXCEPT;
+        void padding1(int32_t value);
+
+        int32_t padding2() const OMG_NOEXCEPT;
+        void padding2(int32_t value);
 
         bool operator == (const Relay& other_) const;
         bool operator != (const Relay& other_) const;
@@ -163,8 +183,11 @@ namespace two {
 
       private:
 
+        float m_init_value_;
         int32_t m_id_;
-        dds::core::string m_status_;
+        int32_t m_status_;
+        int32_t m_padding1_;
+        int32_t m_padding2_;
 
     };
 
@@ -272,5 +295,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // meter_relay_1882284457_hpp
+#endif // meter_relay_1882284563_hpp
 

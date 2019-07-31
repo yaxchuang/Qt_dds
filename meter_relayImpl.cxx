@@ -34,12 +34,11 @@ DDS_TypeCode* two_Meter_c_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode two_Meter_c_g_tc_status_string = DDS_INITIALIZE_STRING_TYPECODE((255));
-    static DDS_TypeCode_Member two_Meter_c_g_tc_members[7]=
+    static DDS_TypeCode_Member two_Meter_c_g_tc_members[9]=
     {
 
         {
-            (char *)"id",/* Member name */
+            (char *)"init_value",/* Member name */
             {
                 0,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -56,7 +55,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"voltage",/* Member name */
+            (char *)"id",/* Member name */
             {
                 1,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -73,7 +72,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"current",/* Member name */
+            (char *)"voltage",/* Member name */
             {
                 2,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -90,7 +89,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"power",/* Member name */
+            (char *)"current",/* Member name */
             {
                 3,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -107,7 +106,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"frequency",/* Member name */
+            (char *)"power",/* Member name */
             {
                 4,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -124,7 +123,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"pf",/* Member name */
+            (char *)"frequency",/* Member name */
             {
                 5,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -141,9 +140,43 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"status",/* Member name */
+            (char *)"pf",/* Member name */
             {
                 6,/* Representation ID */          
+                DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                -1, /* Bitfield bits */
+                NULL/* Member type code is assigned later */
+            },
+            0, /* Ignored */
+            0, /* Ignored */
+            0, /* Ignored */
+            NULL, /* Ignored */
+            RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+            DDS_PUBLIC_MEMBER,/* Member visibility */
+            1,
+            NULL/* Ignored */
+        }, 
+        {
+            (char *)"status",/* Member name */
+            {
+                7,/* Representation ID */          
+                DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                -1, /* Bitfield bits */
+                NULL/* Member type code is assigned later */
+            },
+            0, /* Ignored */
+            0, /* Ignored */
+            0, /* Ignored */
+            NULL, /* Ignored */
+            RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+            DDS_PUBLIC_MEMBER,/* Member visibility */
+            1,
+            NULL/* Ignored */
+        }, 
+        {
+            (char *)"padding",/* Member name */
+            {
+                8,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
                 -1, /* Bitfield bits */
                 NULL/* Member type code is assigned later */
@@ -169,7 +202,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
             0, /* Ignored */
             0, /* Ignored */
             NULL, /* Ignored */
-            7, /* Number of members */
+            9, /* Number of members */
             two_Meter_c_g_tc_members, /* Members */
             DDS_VM_NONE  /* Ignored */         
         }}; /* Type code for two_Meter_c*/
@@ -178,9 +211,9 @@ DDS_TypeCode* two_Meter_c_get_typecode()
         return &two_Meter_c_g_tc;
     }
 
-    two_Meter_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+    two_Meter_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
 
-    two_Meter_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+    two_Meter_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
     two_Meter_c_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
 
@@ -190,7 +223,11 @@ DDS_TypeCode* two_Meter_c_get_typecode()
 
     two_Meter_c_g_tc_members[5]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
 
-    two_Meter_c_g_tc_members[6]._representation._typeCode = (RTICdrTypeCode *)&two_Meter_c_g_tc_status_string;
+    two_Meter_c_g_tc_members[6]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+
+    two_Meter_c_g_tc_members[7]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+
+    two_Meter_c_g_tc_members[8]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
     is_initialized = RTI_TRUE;
 
@@ -228,6 +265,10 @@ RTIBool two_Meter_c_initialize_w_params(
         return RTI_FALSE;
     }
 
+    if (!RTICdrType_initFloat(&sample->init_value)) {
+        return RTI_FALSE;
+    }
+
     if (!RTICdrType_initLong(&sample->id)) {
         return RTI_FALSE;
     }
@@ -252,16 +293,12 @@ RTIBool two_Meter_c_initialize_w_params(
         return RTI_FALSE;
     }
 
-    if (allocParams->allocate_memory){
-        sample->status= DDS_String_alloc ((255));
-        if (sample->status == NULL) {
-            return RTI_FALSE;
-        }
+    if (!RTICdrType_initLong(&sample->status)) {
+        return RTI_FALSE;
+    }
 
-    } else {
-        if (sample->status!= NULL) { 
-            sample->status[0] = '\0';
-        }
+    if (!RTICdrType_initLong(&sample->padding)) {
+        return RTI_FALSE;
     }
 
     return RTI_TRUE;
@@ -302,11 +339,6 @@ void two_Meter_c_finalize_w_params(
         return;
     }
 
-    if (sample->status != NULL) {
-        DDS_String_free(sample->status);
-        sample->status=NULL;
-
-    }
 }
 
 void two_Meter_c_finalize_optional_members(
@@ -336,6 +368,10 @@ RTIBool two_Meter_c_copy(
         return RTI_FALSE;
     }
 
+    if (!RTICdrType_copyFloat (
+        &dst->init_value, &src->init_value)) { 
+        return RTI_FALSE;
+    }
     if (!RTICdrType_copyLong (
         &dst->id, &src->id)) { 
         return RTI_FALSE;
@@ -360,9 +396,12 @@ RTIBool two_Meter_c_copy(
         &dst->pf, &src->pf)) { 
         return RTI_FALSE;
     }
-    if (!RTICdrType_copyStringEx (
-        &dst->status, src->status, 
-        (255) + 1,RTI_TRUE)){
+    if (!RTICdrType_copyLong (
+        &dst->status, &src->status)) { 
+        return RTI_FALSE;
+    }
+    if (!RTICdrType_copyLong (
+        &dst->padding, &src->padding)) { 
         return RTI_FALSE;
     }
 
@@ -406,12 +445,11 @@ DDS_TypeCode* two_Relay_c_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode two_Relay_c_g_tc_status_string = DDS_INITIALIZE_STRING_TYPECODE((255));
-    static DDS_TypeCode_Member two_Relay_c_g_tc_members[2]=
+    static DDS_TypeCode_Member two_Relay_c_g_tc_members[5]=
     {
 
         {
-            (char *)"id",/* Member name */
+            (char *)"init_value",/* Member name */
             {
                 0,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
@@ -428,9 +466,60 @@ DDS_TypeCode* two_Relay_c_get_typecode()
             NULL/* Ignored */
         }, 
         {
-            (char *)"status",/* Member name */
+            (char *)"id",/* Member name */
             {
                 1,/* Representation ID */          
+                DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                -1, /* Bitfield bits */
+                NULL/* Member type code is assigned later */
+            },
+            0, /* Ignored */
+            0, /* Ignored */
+            0, /* Ignored */
+            NULL, /* Ignored */
+            RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+            DDS_PUBLIC_MEMBER,/* Member visibility */
+            1,
+            NULL/* Ignored */
+        }, 
+        {
+            (char *)"status",/* Member name */
+            {
+                2,/* Representation ID */          
+                DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                -1, /* Bitfield bits */
+                NULL/* Member type code is assigned later */
+            },
+            0, /* Ignored */
+            0, /* Ignored */
+            0, /* Ignored */
+            NULL, /* Ignored */
+            RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+            DDS_PUBLIC_MEMBER,/* Member visibility */
+            1,
+            NULL/* Ignored */
+        }, 
+        {
+            (char *)"padding1",/* Member name */
+            {
+                3,/* Representation ID */          
+                DDS_BOOLEAN_FALSE,/* Is a pointer? */
+                -1, /* Bitfield bits */
+                NULL/* Member type code is assigned later */
+            },
+            0, /* Ignored */
+            0, /* Ignored */
+            0, /* Ignored */
+            NULL, /* Ignored */
+            RTI_CDR_REQUIRED_MEMBER, /* Is a key? */
+            DDS_PUBLIC_MEMBER,/* Member visibility */
+            1,
+            NULL/* Ignored */
+        }, 
+        {
+            (char *)"padding2",/* Member name */
+            {
+                4,/* Representation ID */          
                 DDS_BOOLEAN_FALSE,/* Is a pointer? */
                 -1, /* Bitfield bits */
                 NULL/* Member type code is assigned later */
@@ -456,7 +545,7 @@ DDS_TypeCode* two_Relay_c_get_typecode()
             0, /* Ignored */
             0, /* Ignored */
             NULL, /* Ignored */
-            2, /* Number of members */
+            5, /* Number of members */
             two_Relay_c_g_tc_members, /* Members */
             DDS_VM_NONE  /* Ignored */         
         }}; /* Type code for two_Relay_c*/
@@ -465,9 +554,15 @@ DDS_TypeCode* two_Relay_c_get_typecode()
         return &two_Relay_c_g_tc;
     }
 
-    two_Relay_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+    two_Relay_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
 
-    two_Relay_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&two_Relay_c_g_tc_status_string;
+    two_Relay_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+
+    two_Relay_c_g_tc_members[2]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+
+    two_Relay_c_g_tc_members[3]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+
+    two_Relay_c_g_tc_members[4]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
     is_initialized = RTI_TRUE;
 
@@ -505,20 +600,24 @@ RTIBool two_Relay_c_initialize_w_params(
         return RTI_FALSE;
     }
 
+    if (!RTICdrType_initFloat(&sample->init_value)) {
+        return RTI_FALSE;
+    }
+
     if (!RTICdrType_initLong(&sample->id)) {
         return RTI_FALSE;
     }
 
-    if (allocParams->allocate_memory){
-        sample->status= DDS_String_alloc ((255));
-        if (sample->status == NULL) {
-            return RTI_FALSE;
-        }
+    if (!RTICdrType_initLong(&sample->status)) {
+        return RTI_FALSE;
+    }
 
-    } else {
-        if (sample->status!= NULL) { 
-            sample->status[0] = '\0';
-        }
+    if (!RTICdrType_initLong(&sample->padding1)) {
+        return RTI_FALSE;
+    }
+
+    if (!RTICdrType_initLong(&sample->padding2)) {
+        return RTI_FALSE;
     }
 
     return RTI_TRUE;
@@ -559,11 +658,6 @@ void two_Relay_c_finalize_w_params(
         return;
     }
 
-    if (sample->status != NULL) {
-        DDS_String_free(sample->status);
-        sample->status=NULL;
-
-    }
 }
 
 void two_Relay_c_finalize_optional_members(
@@ -593,13 +687,24 @@ RTIBool two_Relay_c_copy(
         return RTI_FALSE;
     }
 
+    if (!RTICdrType_copyFloat (
+        &dst->init_value, &src->init_value)) { 
+        return RTI_FALSE;
+    }
     if (!RTICdrType_copyLong (
         &dst->id, &src->id)) { 
         return RTI_FALSE;
     }
-    if (!RTICdrType_copyStringEx (
-        &dst->status, src->status, 
-        (255) + 1,RTI_TRUE)){
+    if (!RTICdrType_copyLong (
+        &dst->status, &src->status)) { 
+        return RTI_FALSE;
+    }
+    if (!RTICdrType_copyLong (
+        &dst->padding1, &src->padding1)) { 
+        return RTI_FALSE;
+    }
+    if (!RTICdrType_copyLong (
+        &dst->padding2, &src->padding2)) { 
         return RTI_FALSE;
     }
 

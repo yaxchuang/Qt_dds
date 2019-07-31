@@ -9,8 +9,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the RTI Connext manual.
 */
 
-#ifndef meter_relayImpl_1882284457_h
-#define meter_relayImpl_1882284457_h
+#ifndef meter_relayImpl_1882284563_h
+#define meter_relayImpl_1882284563_h
 
 #ifndef NDDS_STANDALONE_TYPE
 #ifndef ndds_c_h
@@ -24,13 +24,15 @@ extern const char *two_Meter_cTYPENAME;
 
 typedef struct two_Meter_c {
 
+    DDS_Float   init_value ;
     DDS_Long   id ;
     DDS_Float   voltage ;
     DDS_Float   current ;
     DDS_Float   power ;
     DDS_Float   frequency ;
     DDS_Float   pf ;
-    DDS_Char *   status ;
+    DDS_Long   status ;
+    DDS_Long   padding ;
 
     two_Meter_c() {}
 
@@ -92,8 +94,11 @@ extern const char *two_Relay_cTYPENAME;
 
 typedef struct two_Relay_c {
 
+    DDS_Float   init_value ;
     DDS_Long   id ;
-    DDS_Char *   status ;
+    DDS_Long   status ;
+    DDS_Long   padding1 ;
+    DDS_Long   padding2 ;
 
     two_Relay_c() {}
 

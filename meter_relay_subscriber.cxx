@@ -94,7 +94,7 @@ int subscriber_main(int domain_id, int sample_count)
     }
     return 1;
 }
-/*
+
 int main(int argc, char *argv[])
 {
 
@@ -128,4 +128,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-*/
+

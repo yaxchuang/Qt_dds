@@ -25,7 +25,7 @@ enum DEVICE_CHOICE{
 
 typedef struct DeviceData{
     std::string status;
-    long id;
+    int32_t id;
     float voltage;
     float current;
     float power;
@@ -33,6 +33,17 @@ typedef struct DeviceData{
     float pf;
 }DeviceData;
 
+typedef struct TempData1{
+    float voltage;
+    float current;
+    float power;
+    float frequency;
+    float pf;
+    int32_t id;
+    int32_t status;
+    int32_t padding1;
+    int32_t padding2;
+}TempData1;
 class oooDDS: public QThread
 {
     Q_OBJECT

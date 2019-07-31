@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+INCLUDEPATH += ./encrypt/include/
 
 CONFIG += c++11
 #CONFIG += libmodbus
@@ -31,14 +32,10 @@ SOURCES += \
         meter_relayImplPlugin.cxx \
         ooodds.cpp \
         meter_relayImpl.cxx \
-        meter_relay_publisher.cxx \
-        meter_relay_subscriber.cxx \
-#        3rdparty/libmodbus/src/modbus.c \
-#        3rdparty/libmodbus/src/modbus-ascii.c \
-#        3rdparty/libmodbus/src/modbus-data.c \
-#        3rdparty/libmodbus/src/modbus-rtu.c \
-#        3rdparty/libmodbus/src/modbus-tcp.c \
-        get_modbus.cpp
+        get_modbus.cpp \
+        encrypt/aes_tools.cpp \
+        encrypt/rsa_tools.cpp \
+        encrypt/hybrid_tools.cpp
 
 HEADERS += \
         mainwindow_dds.h \
@@ -46,13 +43,17 @@ HEADERS += \
         meter_relay.hpp \
         meter_relayImplPlugin.h \
         meter_relayImpl.h \
-#        src/include/modbus/modbus.h \
-#        src/include/modbus/modbus-rtu.h \
-#        src/include/modbus/modbus-tcp.h \
-#        src/include/modbus/modbus-version.h \
         src/include/asyncdeltask.h \
         src/include/qexecthread.h \
-        get_modbus.h
+        get_modbus.h  \
+        encrypt/include/aes_tools.h \
+        encrypt/include/rsa_tools.h \
+        encrypt/include/hybrid_tools.h \
+        encrypt/include/henon_tools.h\
+        encrypt/include/aes_tools.h \
+        encrypt/include/rsa_tools.h \
+        encrypt/include/hybrid_tools.h \
+        encrypt/include/henon_tools.h
 
 FORMS += \
         mainwindow_dds.ui
@@ -63,7 +64,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-NDDSHOME = /home/iclab/rti_connext_dds-5.3.1
+NDDSHOME = /home/liu/Public/rti_connext_dds-5.3.1
 TARGET_ARCH = x64Linux3gcc5.4.0
 SYSLIBS = -ldl -lnsl -lm -lpthread -lrt
 

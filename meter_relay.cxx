@@ -21,34 +21,43 @@ namespace two {
     // ---- Meter: 
 
     Meter::Meter() :
+        m_init_value_ (0.0f) ,
         m_id_ (0) ,
         m_voltage_ (0.0f) ,
         m_current_ (0.0f) ,
         m_power_ (0.0f) ,
         m_frequency_ (0.0f) ,
-        m_pf_ (0.0f) {
+        m_pf_ (0.0f) ,
+        m_status_ (0) ,
+        m_padding_ (0) {
     }   
 
     Meter::Meter (
+        float init_value_param,
         int32_t id_param,
         float voltage_param,
         float current_param,
         float power_param,
         float frequency_param,
         float pf_param,
-        const dds::core::string& status_param)
+        int32_t status_param,
+        int32_t padding_param)
         :
+            m_init_value_( init_value_param ),
             m_id_( id_param ),
             m_voltage_( voltage_param ),
             m_current_( current_param ),
             m_power_( power_param ),
             m_frequency_( frequency_param ),
             m_pf_( pf_param ),
-            m_status_( status_param ) {
+            m_status_( status_param ),
+            m_padding_( padding_param ) {
     }
     #ifdef RTI_CXX11_RVALUE_REFERENCES
     #ifdef RTI_CXX11_NO_IMPLICIT_MOVE_OPERATIONS
-    Meter::Meter(Meter&& other_) OMG_NOEXCEPT  :m_id_ (std::move(other_.m_id_))
+    Meter::Meter(Meter&& other_) OMG_NOEXCEPT  :m_init_value_ (std::move(other_.m_init_value_))
+    ,
+    m_id_ (std::move(other_.m_id_))
     ,
     m_voltage_ (std::move(other_.m_voltage_))
     ,
@@ -61,6 +70,8 @@ namespace two {
     m_pf_ (std::move(other_.m_pf_))
     ,
     m_status_ (std::move(other_.m_status_))
+    ,
+    m_padding_ (std::move(other_.m_padding_))
     {
     } 
 
@@ -75,6 +86,7 @@ namespace two {
     void Meter::swap(Meter& other_)  OMG_NOEXCEPT 
     {
         using std::swap;
+        swap(m_init_value_, other_.m_init_value_);
         swap(m_id_, other_.m_id_);
         swap(m_voltage_, other_.m_voltage_);
         swap(m_current_, other_.m_current_);
@@ -82,9 +94,13 @@ namespace two {
         swap(m_frequency_, other_.m_frequency_);
         swap(m_pf_, other_.m_pf_);
         swap(m_status_, other_.m_status_);
+        swap(m_padding_, other_.m_padding_);
     }  
 
     bool Meter::operator == (const Meter& other_) const {
+        if (m_init_value_ != other_.m_init_value_) {
+            return false;
+        }
         if (m_id_ != other_.m_id_) {
             return false;
         }
@@ -106,6 +122,9 @@ namespace two {
         if (m_status_ != other_.m_status_) {
             return false;
         }
+        if (m_padding_ != other_.m_padding_) {
+            return false;
+        }
         return true;
     }
     bool Meter::operator != (const Meter& other_) const {
@@ -113,6 +132,14 @@ namespace two {
     }
 
     // --- Getters and Setters: -------------------------------------------------
+    float two::Meter::init_value() const OMG_NOEXCEPT{
+        return m_init_value_;
+    }
+
+    void two::Meter::init_value(float value) {
+        m_init_value_ = value;
+    }
+
     int32_t two::Meter::id() const OMG_NOEXCEPT{
         return m_id_;
     }
@@ -161,29 +188,35 @@ namespace two {
         m_pf_ = value;
     }
 
-    dds::core::string& two::Meter::status() OMG_NOEXCEPT {
+    int32_t two::Meter::status() const OMG_NOEXCEPT{
         return m_status_;
     }
 
-    const dds::core::string& two::Meter::status() const OMG_NOEXCEPT {
-        return m_status_;
-    }
-
-    void two::Meter::status(const dds::core::string& value) {
+    void two::Meter::status(int32_t value) {
         m_status_ = value;
+    }
+
+    int32_t two::Meter::padding() const OMG_NOEXCEPT{
+        return m_padding_;
+    }
+
+    void two::Meter::padding(int32_t value) {
+        m_padding_ = value;
     }
 
     std::ostream& operator << (std::ostream& o,const Meter& sample)
     {
         rti::util::StreamFlagSaver flag_saver (o);
         o <<"[";
+        o << "init_value: " << std::setprecision(9) <<sample.init_value()<<", ";
         o << "id: " << sample.id()<<", ";
         o << "voltage: " << std::setprecision(9) <<sample.voltage()<<", ";
         o << "current: " << std::setprecision(9) <<sample.current()<<", ";
         o << "power: " << std::setprecision(9) <<sample.power()<<", ";
         o << "frequency: " << std::setprecision(9) <<sample.frequency()<<", ";
         o << "pf: " << std::setprecision(9) <<sample.pf()<<", ";
-        o << "status: " << sample.status() ;
+        o << "status: " << sample.status()<<", ";
+        o << "padding: " << sample.padding() ;
         o <<"]";
         return o;
     }
@@ -191,21 +224,37 @@ namespace two {
     // ---- Relay: 
 
     Relay::Relay() :
-        m_id_ (0) {
+        m_init_value_ (0.0f) ,
+        m_id_ (0) ,
+        m_status_ (0) ,
+        m_padding1_ (0) ,
+        m_padding2_ (0) {
     }   
 
     Relay::Relay (
+        float init_value_param,
         int32_t id_param,
-        const dds::core::string& status_param)
+        int32_t status_param,
+        int32_t padding1_param,
+        int32_t padding2_param)
         :
+            m_init_value_( init_value_param ),
             m_id_( id_param ),
-            m_status_( status_param ) {
+            m_status_( status_param ),
+            m_padding1_( padding1_param ),
+            m_padding2_( padding2_param ) {
     }
     #ifdef RTI_CXX11_RVALUE_REFERENCES
     #ifdef RTI_CXX11_NO_IMPLICIT_MOVE_OPERATIONS
-    Relay::Relay(Relay&& other_) OMG_NOEXCEPT  :m_id_ (std::move(other_.m_id_))
+    Relay::Relay(Relay&& other_) OMG_NOEXCEPT  :m_init_value_ (std::move(other_.m_init_value_))
+    ,
+    m_id_ (std::move(other_.m_id_))
     ,
     m_status_ (std::move(other_.m_status_))
+    ,
+    m_padding1_ (std::move(other_.m_padding1_))
+    ,
+    m_padding2_ (std::move(other_.m_padding2_))
     {
     } 
 
@@ -220,15 +269,27 @@ namespace two {
     void Relay::swap(Relay& other_)  OMG_NOEXCEPT 
     {
         using std::swap;
+        swap(m_init_value_, other_.m_init_value_);
         swap(m_id_, other_.m_id_);
         swap(m_status_, other_.m_status_);
+        swap(m_padding1_, other_.m_padding1_);
+        swap(m_padding2_, other_.m_padding2_);
     }  
 
     bool Relay::operator == (const Relay& other_) const {
+        if (m_init_value_ != other_.m_init_value_) {
+            return false;
+        }
         if (m_id_ != other_.m_id_) {
             return false;
         }
         if (m_status_ != other_.m_status_) {
+            return false;
+        }
+        if (m_padding1_ != other_.m_padding1_) {
+            return false;
+        }
+        if (m_padding2_ != other_.m_padding2_) {
             return false;
         }
         return true;
@@ -238,6 +299,14 @@ namespace two {
     }
 
     // --- Getters and Setters: -------------------------------------------------
+    float two::Relay::init_value() const OMG_NOEXCEPT{
+        return m_init_value_;
+    }
+
+    void two::Relay::init_value(float value) {
+        m_init_value_ = value;
+    }
+
     int32_t two::Relay::id() const OMG_NOEXCEPT{
         return m_id_;
     }
@@ -246,24 +315,39 @@ namespace two {
         m_id_ = value;
     }
 
-    dds::core::string& two::Relay::status() OMG_NOEXCEPT {
+    int32_t two::Relay::status() const OMG_NOEXCEPT{
         return m_status_;
     }
 
-    const dds::core::string& two::Relay::status() const OMG_NOEXCEPT {
-        return m_status_;
-    }
-
-    void two::Relay::status(const dds::core::string& value) {
+    void two::Relay::status(int32_t value) {
         m_status_ = value;
+    }
+
+    int32_t two::Relay::padding1() const OMG_NOEXCEPT{
+        return m_padding1_;
+    }
+
+    void two::Relay::padding1(int32_t value) {
+        m_padding1_ = value;
+    }
+
+    int32_t two::Relay::padding2() const OMG_NOEXCEPT{
+        return m_padding2_;
+    }
+
+    void two::Relay::padding2(int32_t value) {
+        m_padding2_ = value;
     }
 
     std::ostream& operator << (std::ostream& o,const Relay& sample)
     {
         rti::util::StreamFlagSaver flag_saver (o);
         o <<"[";
+        o << "init_value: " << std::setprecision(9) <<sample.init_value()<<", ";
         o << "id: " << sample.id()<<", ";
-        o << "status: " << sample.status() ;
+        o << "status: " << sample.status()<<", ";
+        o << "padding1: " << sample.padding1()<<", ";
+        o << "padding2: " << sample.padding2() ;
         o <<"]";
         return o;
     }

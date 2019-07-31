@@ -9,8 +9,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the RTI Connext manual.
 */
 
-#ifndef meter_relayImplPlugin_1882284457_h
-#define meter_relayImplPlugin_1882284457_h
+#ifndef meter_relayImplPlugin_1882284563_h
+#define meter_relayImplPlugin_1882284563_h
 
 #include "meter_relayImpl.h"
 
@@ -512,5 +512,5 @@ two_Relay_cPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif
 
-#endif /* meter_relayImplPlugin_1882284457_h */
+#endif /* meter_relayImplPlugin_1882284563_h */
 
