@@ -32,7 +32,7 @@ oooDDS::oooDDS(int domain, DeviceData *Data, bool pub_sub, bool choice):
     dds_relayreader(new dds::sub::DataReader<two::Relay> (*this->dds_subscriber, *this->dds_relaytopic)),
     dds_meterreader(new dds::sub::DataReader<two::Meter> (*this->dds_subscriber, *this->dds_metertopic))
 {
-    std::cout << "DDS Start in Meter!!!!" << std::endl;
+    std::cout << "DDS Start in Relay!!!!" << std::endl;
     this->count = 20;
     this->set_always(false);
     this->set_delay(1000);
@@ -85,8 +85,12 @@ void oooDDS::dds_write()
             this->dds_relaysample->padding2(temp.padding2);
             this->dds_relaywriter->write(*this->dds_relaysample);
             emit response_pub_sub("Relay is Publishing");
-            std::cout << this->Data->id<<std::endl;
-            std::cout << this->Data->status<<std::endl;
+            if (temp.status == 1)
+                emit response_pub_sub("On");
+            else
+                emit response_pub_sub("Off");
+            std::cout << temp.id<<std::endl;
+            std::cout << temp.status<<std::endl;
             msleep(this->delaytime);
         }
         else{
@@ -108,12 +112,12 @@ void oooDDS::dds_write()
             this->dds_meterwriter->write(*this->dds_metersample);
             emit response_pub_sub(tr("Meter No.2 is Publishing"));
             std::cout << "meter_pub~~~~"<<std::endl;
-            std::cout << "ID is "<< this->Data->id<<std::endl;
-            std::cout << "Voltage is " << this->Data->voltage<< " V" << std::endl;
-            std::cout << "Current is " << this->Data->current<< " A" << std::endl;
-            std::cout << "Power is " << this->Data->power<< " W" << std::endl;
-            std::cout << "Frequency is " << this->Data->frequency<< " HZ" << std::endl;
-            std::cout << "PF is " << this->Data->pf<<std::endl;
+            std::cout << "ID is "<< temp.id<<std::endl;
+            std::cout << "Voltage is " << temp.voltage<< " V" << std::endl;
+            std::cout << "Current is " << temp.current<< " A" << std::endl;
+            std::cout << "Power is " << temp.power<< " W" << std::endl;
+            std::cout << "Frequency is " << temp.frequency<< " HZ" << std::endl;
+            std::cout << "PF is " << temp.pf<<std::endl;
             std::cout << std::endl;
             msleep(this->delaytime);
         }

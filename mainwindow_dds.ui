@@ -141,7 +141,7 @@
       <rect>
        <x>260</x>
        <y>100</y>
-       <width>130</width>
+       <width>125</width>
        <height>17</height>
       </rect>
      </property>
@@ -163,7 +163,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Relay 1 (Publisher)</string>
+      <string>Relay 1(Publisher)</string>
      </property>
     </widget>
     <widget class="QWidget" name="layoutWidget">

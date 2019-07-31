@@ -30,7 +30,7 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     Data_local(new DeviceData),
     Data_remote(new DeviceData),
     Data_remote2(new DeviceData),
-    DDS_pub(new oooDDS(0, Data_local, DDS_PUB, 0)), //0->pub_meter
+    DDS_pub(new oooDDS(0, Data_local, DDS_PUB, 1)), //1->pub_relay
     DDS_sub(new oooDDS(0, Data_remote, DDS_SUB, 1)), //0->dds_read_meter1
     DDS_sub2(new oooDDS(0, Data_remote2, DDS_SUB, 0)) //1->dds_read_meter2
 //    data(new MyData)
@@ -47,7 +47,7 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     get_modbus->start();
 
     connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->label, SLOT(setText(QString)));
-    connect(this->DDS_sub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));
+//    connect(this->DDS_pub, SIGNAL(response_pub_sub(QString)), this->ui->textEdit, SLOT(setText(QString)));
     DDS_pub->set_always(true);
     DDS_sub->set_always(true);
     DDS_sub2->set_always(true);
