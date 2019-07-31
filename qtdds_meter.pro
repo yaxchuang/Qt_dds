@@ -64,7 +64,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-NDDSHOME = /home/liu/Public/rti_connext_dds-5.3.1
+NDDSHOME = /home/iclab/rti_connext_dds-5.3.1
 TARGET_ARCH = x64Linux3gcc5.4.0
 SYSLIBS = -ldl -lnsl -lm -lpthread -lrt
 
