@@ -13,7 +13,7 @@
 #include "meter_relay.hpp"
 #include <dds/pub/ddspub.hpp>
 #include <rti/util/util.hpp> // for sleep()
-#include <unistd.h
+#include <unistd.h>
 
 #define On 1
 #define G_MSEC_PER_SEC 1000
