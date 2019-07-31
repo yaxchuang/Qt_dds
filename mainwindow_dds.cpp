@@ -38,7 +38,7 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
 {
     ui->setupUi(this);
     UISetup();
-    this->Data_pub.id = 1;
+    this->Data_pub.id = 3;
     //this->Data_pub.status = "on";
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeDisplay()));
     timer->start(10);
@@ -90,7 +90,7 @@ MainWindow_dds::~MainWindow_dds()
 void MainWindow_dds::UISetup()
 {
     this->setStyleSheet("background-color:#bdd7ee");
-    QPixmap pix("/home/iclab/Qtdds_0624M/logo.png");
+    QPixmap pix("/home/iclab/Qtdds_0624M2/logo.png");
     ui->image->setPixmap(pix);
     ui->image->setScaledContents(true);
     ui->image->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

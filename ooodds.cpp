@@ -46,7 +46,7 @@ void oooDDS::dds_write()
 //    };
     // Set the second bit to 1
     this->running |= 0x10;
-    this->Data->id = 1;
+    this->Data->id = 3;
 
     /* For Encryption */
     KEYS key_enc; // key(seed) for encrypt data
@@ -104,7 +104,7 @@ void oooDDS::dds_write()
             this->dds_metersample->frequency(this->Data->frequency);
             this->dds_metersample->pf(this->Data->pf);
             this->dds_meterwriter->write(*this->dds_metersample);
-            emit response_pub_sub(tr("Meter No.1 is Publishing"));
+            emit response_pub_sub(tr("Meter No.2 is Publishing"));
             std::cout << "meter_pub~~~~"<<std::endl;
             std::cout << "ID is "<< this->Data->id<<std::endl;
             std::cout << "Voltage is " << this->Data->voltage<< " V" << std::endl;
@@ -225,7 +225,7 @@ void oooDDS::dds_read_meter()
         // Take all samples
         dds::sub::LoanedSamples<two::Meter> samples = reader_1.take();
         for (auto sample : samples){
-            if (sample.data().id() == 3 ){
+            if (sample.data().id() == 1 ){
                 if (sample.info().valid()){
                     count1 += !always_1;
                     key_dec.henon_float = sample.data().init_value();
