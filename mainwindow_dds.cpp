@@ -118,7 +118,7 @@ void MainWindow_dds::lcdshow()
     ui->lcdNumber_p_2->display(Data_remote2->power);
     ui->lcdNumber_freq_2->display(Data_remote2->frequency);
     ui->lcdNumber_pf_2->display(Data_remote2->pf);
-    sleep(1);
+//    sleep(1);
 //    ui->lcdNumber_vol_2->display(110);
 //    ui->lcdNumber_cur_2->display(0.45);
 //    ui->lcdNumber_p_2->display(10);

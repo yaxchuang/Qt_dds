@@ -9,8 +9,8 @@ For more information, type 'rtiddsgen -help' at a command shell
 or consult the RTI Connext manual.
 */
 
-#ifndef meter_relay_1882284563_hpp
-#define meter_relay_1882284563_hpp
+#ifndef meter_relay_1882284561_hpp
+#define meter_relay_1882284561_hpp
 
 #include <iosfwd>
 #include "meter_relayImpl.h"
@@ -62,7 +62,7 @@ namespace two {
         Meter();
 
         Meter(
-            float init_value_param,
+            int32_t init_value_param,
             int32_t id_param,
             float voltage_param,
             float current_param,
@@ -84,8 +84,8 @@ namespace two {
         #endif
         #endif 
 
-        float init_value() const OMG_NOEXCEPT;
-        void init_value(float value);
+        int32_t init_value() const OMG_NOEXCEPT;
+        void init_value(int32_t value);
 
         int32_t id() const OMG_NOEXCEPT;
         void id(int32_t value);
@@ -118,7 +118,7 @@ namespace two {
 
       private:
 
-        float m_init_value_;
+        int32_t m_init_value_;
         int32_t m_id_;
         float m_voltage_;
         float m_current_;
@@ -143,7 +143,7 @@ namespace two {
         Relay();
 
         Relay(
-            float init_value_param,
+            int32_t init_value_param,
             int32_t id_param,
             int32_t status_param,
             int32_t padding1_param,
@@ -161,8 +161,8 @@ namespace two {
         #endif
         #endif 
 
-        float init_value() const OMG_NOEXCEPT;
-        void init_value(float value);
+        int32_t init_value() const OMG_NOEXCEPT;
+        void init_value(int32_t value);
 
         int32_t id() const OMG_NOEXCEPT;
         void id(int32_t value);
@@ -183,7 +183,7 @@ namespace two {
 
       private:
 
-        float m_init_value_;
+        int32_t m_init_value_;
         int32_t m_id_;
         int32_t m_status_;
         int32_t m_padding1_;
@@ -295,5 +295,5 @@ namespace rti {
 #define NDDSUSERDllExport
 #endif
 
-#endif // meter_relay_1882284563_hpp
+#endif // meter_relay_1882284561_hpp
 

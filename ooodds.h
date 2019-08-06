@@ -43,6 +43,17 @@ typedef struct TempData1{
     int32_t status;
     int32_t padding1;
     int32_t padding2;
+    friend std::ostream& operator<<(std::ostream& os, const TempData1& data){
+        std::cout << "voltage: " << data.voltage << std::endl;
+        std::cout << "current: " << data.current << std::endl;
+        std::cout << "power: " << data.power << std::endl;
+        std::cout << "frequency: " << data.frequency << std::endl;
+        std::cout << "pf: " << data.pf << std::endl;
+        std::cout << "id: " << data.id << std::endl;
+        std::cout << "status: " << data.status << std::endl;
+        std::cout << "padding1: " << data.padding1 << std::endl;
+        std::cout << "padding2: " << data.padding2 << std::endl;
+    }
 }TempData1;
 class oooDDS: public QThread
 {

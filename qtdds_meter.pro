@@ -33,14 +33,14 @@ SOURCES += \
         ooodds.cpp \
         meter_relayImpl.cxx \
         get_modbus.cpp \
-        3rdparty/libmodbus/src/modbus.c \
-        3rdparty/libmodbus/src/modbus-ascii.c \
-        3rdparty/libmodbus/src/modbus-data.c \
-        3rdparty/libmodbus/src/modbus-rtu.c \
-        3rdparty/libmodbus/src/modbus-tcp.c \
         encrypt/aes_tools.cpp \
         encrypt/rsa_tools.cpp \
-        encrypt/hybrid_tools.cpp
+        encrypt/hybrid_tools.cpp \
+    3rdparty/libmodbus/src/modbus.c \
+    3rdparty/libmodbus/src/modbus-ascii.c \
+    3rdparty/libmodbus/src/modbus-data.c \
+    3rdparty/libmodbus/src/modbus-rtu.c \
+    3rdparty/libmodbus/src/modbus-tcp.c
 
 HEADERS += \
         mainwindow_dds.h \
@@ -51,12 +51,6 @@ HEADERS += \
         src/include/asyncdeltask.h \
         src/include/qexecthread.h \
         get_modbus.h  \
-        src/include/modbus/modbus.h \
-        src/include/modbus/modbus-rtu.h \
-        src/include/modbus/modbus-tcp.h \
-        src/include/modbus/modbus-version.h \
-        src/include/asyncdeltask.h \
-        src/include/qexecthread.h \
         encrypt/include/aes_tools.h \
         encrypt/include/rsa_tools.h \
         encrypt/include/hybrid_tools.h \
@@ -64,7 +58,11 @@ HEADERS += \
         encrypt/include/aes_tools.h \
         encrypt/include/rsa_tools.h \
         encrypt/include/hybrid_tools.h \
-        encrypt/include/henon_tools.h
+        encrypt/include/henon_tools.h \
+    src/include/modbus/modbus.h \
+    src/include/modbus/modbus-rtu.h \
+    src/include/modbus/modbus-tcp.h \
+    src/include/modbus/modbus-version.h
 
 FORMS += \
         mainwindow_dds.ui

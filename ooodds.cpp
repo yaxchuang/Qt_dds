@@ -35,7 +35,7 @@ oooDDS::oooDDS(int domain, DeviceData *Data, bool pub_sub, bool choice):
     std::cout << "DDS Start in Relay!!!!" << std::endl;
     this->count = 20;
     this->set_always(false);
-    this->set_delay(1000);
+    this->set_delay(100);
 }
 
 void oooDDS::dds_write()
@@ -84,8 +84,8 @@ void oooDDS::dds_write()
             this->dds_relaysample->padding1(temp.padding1);
             this->dds_relaysample->padding2(temp.padding2);
             this->dds_relaywriter->write(*this->dds_relaysample);
-            emit response_pub_sub("Relay is Publishing");
-            if (temp.status == 1)
+//            emit response_pub_sub("Relay is Publishing");
+            if (Data->status == "On")
                 emit response_pub_sub("On");
             else
                 emit response_pub_sub("Off");
@@ -94,13 +94,16 @@ void oooDDS::dds_write()
             msleep(this->delaytime);
         }
         else{
+            std::cout << "------------Publishing------------" << std::endl;
+            std::cout << temp << std::endl;
             // 2. encrypt data
             next_key[Data->id-1] = Encryption_CBC((BYTE*)&temp, 32, key_enc.henon_float);
             
             // 3. encrypt key using RSA
             key_send = Encrypt_key(key_enc.henon_int, e[Data->id-1], n[Data->id-1]);
-
-            this->dds_relaysample->init_value(key_send);
+            std::cout << "---------Encrypted---------" << std::endl;
+            std::cout << temp << std::endl;
+            this->dds_metersample->init_value(key_send);
             this->dds_metersample->id(temp.id);
             this->dds_metersample->voltage(temp.voltage);
             this->dds_metersample->current(temp.current);
@@ -157,7 +160,7 @@ void oooDDS::dds_read_meter1()
         for (auto sample : samples){
             if (sample.info().valid()){
                 count1 += !always_1;
-                key_dec.henon_float = sample.data().init_value();
+                key_dec.henon_int = sample.data().init_value();
                 data.id = sample.data().id();
                 data.voltage = sample.data().voltage();
                 data.current = sample.data().current();
@@ -237,7 +240,7 @@ void oooDDS::dds_read_meter2()
         for (auto sample : samples){
             if (sample.info().valid()){
                 count1 += !always_1;
-                key_dec.henon_float = sample.data().init_value();
+                key_dec.henon_int = sample.data().init_value();
                 data.id = sample.data().id();
                 data.voltage = sample.data().voltage();
                 data.current = sample.data().current();
@@ -246,12 +249,22 @@ void oooDDS::dds_read_meter2()
                 data.pf = sample.data().pf();
                 data.status = sample.data().status();
                 data.padding1 = sample.data().padding();
+
+                std::cout << "------------Subsribing------------" << std::endl;
+                std::cout << data << std::endl;
                 // 1. decode key using RSA
                 key_dec.henon_int = Decrypt_key((uint32_t)key_dec.henon_int, d, n);
 
                 // 2. decrypt function
                 Decryption_CBC((BYTE*)&data, 32, key_dec.henon_float);
 
+                std::cout << data.id << std::endl;
+                std::cout << data.voltage<< std::endl;
+                std::cout << data.current << std::endl;
+
+
+                std::cout << "---------Decrypted---------" << std::endl;
+                std::cout << data << std::endl;
                 if (data.id == 3 ){
                     data_1.id = data.id;
                     data_1.voltage = data.voltage;

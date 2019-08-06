@@ -211,7 +211,7 @@ DDS_TypeCode* two_Meter_c_get_typecode()
         return &two_Meter_c_g_tc;
     }
 
-    two_Meter_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+    two_Meter_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
     two_Meter_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
@@ -265,7 +265,7 @@ RTIBool two_Meter_c_initialize_w_params(
         return RTI_FALSE;
     }
 
-    if (!RTICdrType_initFloat(&sample->init_value)) {
+    if (!RTICdrType_initLong(&sample->init_value)) {
         return RTI_FALSE;
     }
 
@@ -368,7 +368,7 @@ RTIBool two_Meter_c_copy(
         return RTI_FALSE;
     }
 
-    if (!RTICdrType_copyFloat (
+    if (!RTICdrType_copyLong (
         &dst->init_value, &src->init_value)) { 
         return RTI_FALSE;
     }
@@ -554,7 +554,7 @@ DDS_TypeCode* two_Relay_c_get_typecode()
         return &two_Relay_c_g_tc;
     }
 
-    two_Relay_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_float;
+    two_Relay_c_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
     two_Relay_c_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
 
@@ -600,7 +600,7 @@ RTIBool two_Relay_c_initialize_w_params(
         return RTI_FALSE;
     }
 
-    if (!RTICdrType_initFloat(&sample->init_value)) {
+    if (!RTICdrType_initLong(&sample->init_value)) {
         return RTI_FALSE;
     }
 
@@ -687,7 +687,7 @@ RTIBool two_Relay_c_copy(
         return RTI_FALSE;
     }
 
-    if (!RTICdrType_copyFloat (
+    if (!RTICdrType_copyLong (
         &dst->init_value, &src->init_value)) { 
         return RTI_FALSE;
     }

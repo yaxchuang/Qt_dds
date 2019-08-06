@@ -161,7 +161,7 @@ two_Meter_cPluginSupport_print_data(
         return;
     }
 
-    RTICdrType_printFloat(
+    RTICdrType_printLong(
         &sample->init_value, "init_value", indent_level + 1);    
 
     RTICdrType_printLong(
@@ -336,7 +336,7 @@ two_Meter_cPlugin_serialize(
 
     if(serialize_sample) {
 
-        if (!RTICdrStream_serializeFloat(
+        if (!RTICdrStream_serializeLong(
             stream, &sample->init_value)) {
             return RTI_FALSE;
         }
@@ -418,7 +418,7 @@ two_Meter_cPlugin_deserialize_sample(
 
         two_Meter_c_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
 
-        if (!RTICdrStream_deserializeFloat(
+        if (!RTICdrStream_deserializeLong(
             stream, &sample->init_value)) {
             goto fin; 
         }
@@ -682,7 +682,7 @@ RTIBool two_Meter_cPlugin_skip(
 
     if (skip_sample) {
 
-        if (!RTICdrStream_skipFloat (stream)) {
+        if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
         if (!RTICdrStream_skipLong (stream)) {
@@ -752,7 +752,7 @@ two_Meter_cPlugin_get_serialized_sample_max_size_ex(
         initial_alignment = 0;
     }
 
-    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
 
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
@@ -830,7 +830,7 @@ two_Meter_cPlugin_get_serialized_sample_min_size(
         initial_alignment = 0;
     }
 
-    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
@@ -899,7 +899,7 @@ two_Meter_cPlugin_get_serialized_sample_size(
             current_alignment);
     }
 
-    current_alignment += RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
             endpoint_data, current_alignment));
 
@@ -1383,7 +1383,7 @@ two_Relay_cPluginSupport_print_data(
         return;
     }
 
-    RTICdrType_printFloat(
+    RTICdrType_printLong(
         &sample->init_value, "init_value", indent_level + 1);    
 
     RTICdrType_printLong(
@@ -1546,7 +1546,7 @@ two_Relay_cPlugin_serialize(
 
     if(serialize_sample) {
 
-        if (!RTICdrStream_serializeFloat(
+        if (!RTICdrStream_serializeLong(
             stream, &sample->init_value)) {
             return RTI_FALSE;
         }
@@ -1608,7 +1608,7 @@ two_Relay_cPlugin_deserialize_sample(
 
         two_Relay_c_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
 
-        if (!RTICdrStream_deserializeFloat(
+        if (!RTICdrStream_deserializeLong(
             stream, &sample->init_value)) {
             goto fin; 
         }
@@ -1856,7 +1856,7 @@ RTIBool two_Relay_cPlugin_skip(
 
     if (skip_sample) {
 
-        if (!RTICdrStream_skipFloat (stream)) {
+        if (!RTICdrStream_skipLong (stream)) {
             goto fin; 
         }
         if (!RTICdrStream_skipLong (stream)) {
@@ -1914,7 +1914,7 @@ two_Relay_cPlugin_get_serialized_sample_max_size_ex(
         initial_alignment = 0;
     }
 
-    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
 
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
@@ -1980,7 +1980,7 @@ two_Relay_cPlugin_get_serialized_sample_min_size(
         initial_alignment = 0;
     }
 
-    current_alignment +=RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
     current_alignment +=RTICdrType_getLongMaxSizeSerialized(
         current_alignment);
@@ -2041,7 +2041,7 @@ two_Relay_cPlugin_get_serialized_sample_size(
             current_alignment);
     }
 
-    current_alignment += RTICdrType_getFloatMaxSizeSerialized(
+    current_alignment += RTICdrType_getLongMaxSizeSerialized(
         PRESTypePluginDefaultEndpointData_getAlignment(
             endpoint_data, current_alignment));
 
