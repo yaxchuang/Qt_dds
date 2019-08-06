@@ -73,7 +73,7 @@ void Get_modbus::PrepareReadRequest(DeviceData *data)
         if (reply->error() == QModbusDevice::NoError)
         {
             const QModbusDataUnit unit = reply->result();
-            data->id = (1);
+            // data->id = (1);
             data->current = (unit.value(6)*0.1f*4/100);
             data->voltage = (unit.value(0)*0.1f);
             data->power = (unit.value(10)*0.1f*4);

@@ -43,6 +43,15 @@ MainWindow_dds::MainWindow_dds(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeDisplay()));
     timer->start(10);
 
+    DeviceData *temp[3] = {Data_local, Data_remote, Data_remote2};
+    for (int i=0; i < 3; i++) {
+        temp[i]->pf = 0;
+        temp[i]->power = 0;
+        temp[i]->current = 0;
+        temp[i]->voltage = 0;
+        temp[i]->frequency = 0;
+    }
+
     Get_modbus *get_modbus = new Get_modbus(this, Data_local);
     get_modbus->start();
 
@@ -113,7 +122,7 @@ void MainWindow_dds::lcdshow()
     ui->lcdNumber_p->display(Data_local->power);
     ui->lcdNumber_freq->display(Data_local->frequency);
     ui->lcdNumber_pf->display(Data_local->pf);
-    sleep(1);
+//    sleep(1);
     ui->lcdNumber_vol_2->display(Data_remote->voltage);
     ui->lcdNumber_cur_2->display(Data_remote->current);
     ui->lcdNumber_p_2->display(Data_remote->power);
