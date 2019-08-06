@@ -21,7 +21,7 @@ namespace two {
     // ---- Meter: 
 
     Meter::Meter() :
-        m_init_value_ (0.0f) ,
+        m_init_value_ (0) ,
         m_id_ (0) ,
         m_voltage_ (0.0f) ,
         m_current_ (0.0f) ,
@@ -33,7 +33,7 @@ namespace two {
     }   
 
     Meter::Meter (
-        float init_value_param,
+        int32_t init_value_param,
         int32_t id_param,
         float voltage_param,
         float current_param,
@@ -132,11 +132,11 @@ namespace two {
     }
 
     // --- Getters and Setters: -------------------------------------------------
-    float two::Meter::init_value() const OMG_NOEXCEPT{
+    int32_t two::Meter::init_value() const OMG_NOEXCEPT{
         return m_init_value_;
     }
 
-    void two::Meter::init_value(float value) {
+    void two::Meter::init_value(int32_t value) {
         m_init_value_ = value;
     }
 
@@ -208,7 +208,7 @@ namespace two {
     {
         rti::util::StreamFlagSaver flag_saver (o);
         o <<"[";
-        o << "init_value: " << std::setprecision(9) <<sample.init_value()<<", ";
+        o << "init_value: " << sample.init_value()<<", ";
         o << "id: " << sample.id()<<", ";
         o << "voltage: " << std::setprecision(9) <<sample.voltage()<<", ";
         o << "current: " << std::setprecision(9) <<sample.current()<<", ";
@@ -224,7 +224,7 @@ namespace two {
     // ---- Relay: 
 
     Relay::Relay() :
-        m_init_value_ (0.0f) ,
+        m_init_value_ (0) ,
         m_id_ (0) ,
         m_status_ (0) ,
         m_padding1_ (0) ,
@@ -232,7 +232,7 @@ namespace two {
     }   
 
     Relay::Relay (
-        float init_value_param,
+        int32_t init_value_param,
         int32_t id_param,
         int32_t status_param,
         int32_t padding1_param,
@@ -299,11 +299,11 @@ namespace two {
     }
 
     // --- Getters and Setters: -------------------------------------------------
-    float two::Relay::init_value() const OMG_NOEXCEPT{
+    int32_t two::Relay::init_value() const OMG_NOEXCEPT{
         return m_init_value_;
     }
 
-    void two::Relay::init_value(float value) {
+    void two::Relay::init_value(int32_t value) {
         m_init_value_ = value;
     }
 
@@ -343,7 +343,7 @@ namespace two {
     {
         rti::util::StreamFlagSaver flag_saver (o);
         o <<"[";
-        o << "init_value: " << std::setprecision(9) <<sample.init_value()<<", ";
+        o << "init_value: " << sample.init_value()<<", ";
         o << "id: " << sample.id()<<", ";
         o << "status: " << sample.status()<<", ";
         o << "padding1: " << sample.padding1()<<", ";
